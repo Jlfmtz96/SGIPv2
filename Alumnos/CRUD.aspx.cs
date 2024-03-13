@@ -90,18 +90,39 @@ namespace SGIPv2.Pages
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
-            SqlCommand cmd = new SqlCommand("UPDATE Alumnos SET nombre_alumno = @Nombre, ap_pat = @ApellidoPaterno, ap_mat = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
-            con.Open();
-            cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
-            cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
-            cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
-            cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
-            cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
+            try
+            {
+                SqlCommand cmd = new SqlCommand("UPDATE Alumno SET nombre_alumno = @Nombre, ap_pat = @ApellidoPaterno, ap_mat = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
+                con.Open();
+                cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
+                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
+                cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
+                cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
+                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
 
+                int rowsAffected = cmd.ExecuteNonQuery();
+                con.Close();
 
-            cmd.ExecuteNonQuery();
-            con.Close();
-            Response.Redirect("Index.aspx");
+                Session["UpdateSuccess"] = true;
+
+                Response.Redirect("Index.aspx");
+            }
+            catch (Exception ex)
+            {
+                string errorScript = @"<script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var modalBody = document.getElementById('modalBody');
+                                    var message = 'Error al actualizar los datos.';
+                                    modalBody.textContent = message;
+                                    var myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
+                                        backdrop: 'static',
+                                        keyboard: false
+                                    });
+                                    myModal.show();
+                                });
+                            </script>";
+                ClientScript.RegisterStartupScript(this.GetType(), "ShowErrorModal", errorScript);
+            }
         }
 
         protected void BtnDelete_Click(object sender, EventArgs e)

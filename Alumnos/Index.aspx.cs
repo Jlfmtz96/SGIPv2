@@ -17,6 +17,27 @@ namespace SGIPv2.Pages
         {
             if (!IsPostBack)
             {
+                if (Session["UpdateSuccess"] != null && (bool)Session["UpdateSuccess"])
+                {
+                    // Mostrar mensaje de éxito en el modal al cargar la página
+                    string script = @"<script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var modalBody = document.getElementById('modalBody');
+                                    var message = 'Datos actualizados correctamente.';
+                                    modalBody.textContent = message;
+                                    var myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
+                                        backdrop: 'static',
+                                        keyboard: false
+                                    });
+                                    myModal.show();
+                                });
+                            </script>";
+                    ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script);
+
+                    // Restablecer la variable de sesión después de mostrar el modal
+                    Session["UpdateSuccess"] = false;
+                }
+
                 CargarTabla();
             }
         }
