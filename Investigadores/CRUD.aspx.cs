@@ -36,6 +36,7 @@ namespace SGIPv2.Investigadores
                         case "C":
                             this.lbltitulo.Text = "Agregar nuevo investigador";
                             this.BtnCreate.Visible = true;
+                            this.tbclave.Enabled=true;
                             break;
                         case "R":
                             this.lbltitulo.Text = "Consulta de investigador";
@@ -43,7 +44,6 @@ namespace SGIPv2.Investigadores
                         case "U":
                             this.lbltitulo.Text = "Modificar investigador";
                             this.BtnUpdate.Visible = true;
-                            tbclave.ReadOnly = true;
                             break;
                         case "D":
                             this.lbltitulo.Text = "Dar de baja investigador";
@@ -56,8 +56,7 @@ namespace SGIPv2.Investigadores
         void CargarDatos()
         {
             con.Open();
-            SqlDataAdapter da = new SqlDataAdapter("sp_read", con);
-            da.SelectCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Investigador WHERE cve_inv = @cve_inv", con);
             da.SelectCommand.Parameters.Add("@cve_inv", SqlDbType.VarChar).Value = aCve;
             DataSet ds = new DataSet();
             ds.Clear();

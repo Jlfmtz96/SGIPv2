@@ -44,8 +44,7 @@ namespace SGIPv2.Pages
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("alumnos_load", con);
-            cmd.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd = new SqlCommand("SELECT cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura FROM Alumnos", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();

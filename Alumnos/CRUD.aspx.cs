@@ -35,7 +35,8 @@ namespace SGIPv2.Pages
                     {
                         case "C":
                             this.lbltitulo.Text = "Agregar nuevo alumno";
-                            this.BtnCreate.Visible = true; 
+                            this.BtnCreate.Visible = true;
+                            this.tbclave.Enabled= true;
                             break;
                         case "R":
                             this.lbltitulo.Text = "Consulta de alumno";
@@ -43,7 +44,6 @@ namespace SGIPv2.Pages
                         case "U":
                             this.lbltitulo.Text = "Modificar alumno";
                             this.BtnUpdate.Visible = true;
-                            tbclave.ReadOnly = true;
                             break;
                         case "D":
                             this.lbltitulo.Text = "Dar de baja alumno";
@@ -57,8 +57,7 @@ namespace SGIPv2.Pages
         void CargarDatos()
         {
             con.Open();
-            SqlDataAdapter da = new SqlDataAdapter("alumno_read", con);
-            da.SelectCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Alumnos WHERE cve_alumno = @cve_alumno", con);
             da.SelectCommand.Parameters.Add("@cve_alumno", SqlDbType.VarChar).Value=aCve;
             DataSet ds = new DataSet();
             ds.Clear();
@@ -75,13 +74,12 @@ namespace SGIPv2.Pages
 
         protected void BtnCreate_Click(object sender, EventArgs e)
         {
-            SqlCommand cmd = new SqlCommand("alumnos_create", con);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Alumnos (cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura) VALUES (@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)", con);
             con.Open();
-            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
             cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
-            cmd.Parameters.Add("@Ap_pat", SqlDbType.VarChar).Value = tbappat.Text;
-            cmd.Parameters.Add("@Ap_mat", SqlDbType.VarChar).Value = tbapmat.Text;
+            cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
+            cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
             cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
             cmd.ExecuteNonQuery();
             con.Close();
@@ -92,7 +90,7 @@ namespace SGIPv2.Pages
         {
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Alumno SET nombre_alumno = @Nombre, ap_pat = @ApellidoPaterno, ap_mat = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Alumnos SET nombre_alumno = @Nombre, ap_pat = @ApellidoPaterno, ap_mat = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
                 con.Open();
                 cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
                 cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;

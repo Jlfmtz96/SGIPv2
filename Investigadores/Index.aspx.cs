@@ -31,8 +31,7 @@ namespace SGIPv2.Investigadores
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("sp_load", con);
-            cmd.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Investigador", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
