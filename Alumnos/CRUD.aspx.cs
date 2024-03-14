@@ -74,20 +74,69 @@ namespace SGIPv2.Pages
 
         protected void BtnCreate_Click(object sender, EventArgs e)
         {
-            SqlCommand cmd = new SqlCommand("INSERT INTO Alumnos (cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura) VALUES (@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)", con);
-            con.Open();
-            cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
-            cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
-            cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
-            cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
-            cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
-            cmd.ExecuteNonQuery();
-            con.Close();
-            Response.Redirect("Index.aspx");
+            string clave = tbclave.Text;
+            string nombre = tbnombre.Text;
+            string appat = tbappat.Text;
+            string apmat = tbapmat.Text;
+            string licenciatura = tblicenciatura.Text;
+
+            if(string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(appat) || string.IsNullOrWhiteSpace(apmat) || string.IsNullOrWhiteSpace(licenciatura))
+            {
+                lblErrorMessage.Text = "Todos los campos son obligatorios.";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
+                return;
+            }
+
+            if(ClaveExiste(clave))
+            {
+                lblErrorMessage.Text = "Esta clave ya se encuentra registrada";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
+                return;
+            }
+
+            string query = "INSERT INTO Alumnos (cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura) VALUES (@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
+                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
+                cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
+                cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
+                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
+
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    // Mostrar el modal de éxito
+                    lblSuccessMessage.Text = "Alumno agregado satisfactoriamente.";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
+                    LimpiarCampos();
+                    //Response.Redirect("Index.aspx");
+                }
+                catch (Exception ex)
+                {
+                    // Mostrar el modal de error con el mensaje de error
+                    lblErrorMessage.Text = "Error al agregar alumno: " + ex.Message ;
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
+                }
+            }
         }
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
+            string clave = tbclave.Text;
+            string nombre = tbnombre.Text;
+            string appat = tbappat.Text;
+            string apmat = tbapmat.Text;
+            string licenciatura = tblicenciatura.Text;
+
+            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(appat) || string.IsNullOrWhiteSpace(apmat) || string.IsNullOrWhiteSpace(licenciatura))
+            {
+                lblErrorMessage.Text = "Todos los campos son obligatorios.";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
+                return;
+            }
             try
             {
                 SqlCommand cmd = new SqlCommand("UPDATE Alumnos SET nombre_alumno = @Nombre, ap_pat = @ApellidoPaterno, ap_mat = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
@@ -101,25 +150,17 @@ namespace SGIPv2.Pages
                 int rowsAffected = cmd.ExecuteNonQuery();
                 con.Close();
 
-                Session["UpdateSuccess"] = true;
-
-                Response.Redirect("Index.aspx");
+                // Mostrar mensaje de éxito
+                lblSuccessMessage.Text = "Alumno actualizado satisfactoriamente.";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
+                //System.Threading.Thread.Sleep(3000);
+                //Response.Redirect("Index.aspx");
+                ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { window.location.href = 'Index.aspx'; }, 2000);", true);
             }
             catch (Exception ex)
             {
-                string errorScript = @"<script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    var modalBody = document.getElementById('modalBody');
-                                    var message = 'Error al actualizar los datos.';
-                                    modalBody.textContent = message;
-                                    var myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
-                                        backdrop: 'static',
-                                        keyboard: false
-                                    });
-                                    myModal.show();
-                                });
-                            </script>";
-                ClientScript.RegisterStartupScript(this.GetType(), "ShowErrorModal", errorScript);
+                lblErrorMessage.Text = "Error al actualizar alumno: " + ex.Message;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
             }
         }
 
@@ -131,6 +172,26 @@ namespace SGIPv2.Pages
         protected void BtnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("Index.aspx");
+        }
+
+        private bool ClaveExiste(string clave)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Alumnos WHERE cve_alumno = @Cve_alumno", con);
+            cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = clave;
+            int count = (int)cmd.ExecuteScalar();
+            con.Close();
+
+            return count > 0;
+        }
+
+        private void LimpiarCampos()
+        {
+            tbclave.Text = "";
+            tbnombre.Text = "";
+            tbappat.Text = "";
+            tbapmat.Text = "";
+            tblicenciatura.Text = "";
         }
     }
 }

@@ -7,6 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" /> 
     <title>
         <asp:ContentPlaceHolder ID="title" runat="server"></asp:ContentPlaceHolder>
@@ -112,17 +114,11 @@
                     <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                         <div class="hidden sm:ml-6 sm:block">
                             <div class="flex space-x-4">
-                                <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
-                                <asp:HyperLink runat="server" class="bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
+                                <asp:HyperLink runat="server" ID="AlumnosLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
+                                <asp:HyperLink runat="server" ID="InvestigadoresLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
                                 <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="#" Text="Proyectos" />
                                 <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="#" Text="Publicaciones" />
                                 <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="#" Text="Revistas" />
-                                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                <!--<a href="#" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium">Alumnos</a>
-                                <a href="#" class="bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Investigadores</a>
-                                <a href="#" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium">Proyectos</a>
-                                <a href="#" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium">Publicaciones</a>
-                                <a href="#" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium">Revistas</a>-->
                             </div>
                         </div>
                     </div>
