@@ -16,6 +16,26 @@
         <br />
         <div class="container mx-auto">
             <div class="flex justify-end">
+                                    <div class="dropdown" style="position: relative; margin-right: auto; background-color:dimgray; border-radius:20px; padding:10px; color:white">
+                                        <button class="btn dropdown-toggle" type="button" id="btnDropdown" aria-haspopup="true" aria-expanded="false">
+                                            Seleccionar Columnas
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnDropdown" style="position: absolute; top: 100%; left: 0; background-color: dimgray; border-radius:20px;">
+                                            <div class="dropdown-item" style=" padding: 8px;">
+                                                <asp:CheckBox ID="chkColumn1" runat="server" Text="Clave UASLP" Checked="true" />
+                                            </div>
+                                            <div class="dropdown-item" style=" padding: 8px;">
+                                                <asp:CheckBox ID="chkColumn2" runat="server" Text="Nombre" Checked="true" />
+                                            </div>
+                                            <div class="dropdown-item" style=" padding: 8px;">
+                                                <asp:CheckBox ID="chkColumn3" runat="server" Text="Licenciatura" Checked="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                <asp:Label ID="lblResultsCount" runat="server" Text="" CssClass="mr-3" style="align-self: center;"></asp:Label>
+
                  <div>
                      <asp:TextBox ID="txtBusqueda" runat="server" style="border: 1px solid #CCCCCC; border-radius: 4px; padding: 6px 10px;"></asp:TextBox>
                      <asp:Button ID="btnBuscar" CssClass="focus:outline-none text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 hover:cursor-pointer form-control" runat="server" Text="Buscar" OnClick="btnBuscar_Click" />
@@ -25,6 +45,9 @@
                     <asp:LinkButton ID="btnGenerarExcel" runat="server" CssClass="bg-red text-xl mr-2" Text="<span class='far fa-file-excel' />" OnClick="btnGenerarExcel_Click"  />
 
                     <asp:Button runat="server" ID="BtnCreate" CssClass="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 hover:cursor-pointer form-control" Text="Agregar" OnClick="BtnCreate_Click"/>
+                </div>
+                <div>
+                        
                 </div>
             </div>
         </div>
@@ -44,5 +67,38 @@
                 </asp:GridView>
             </div>
         </div>
+
+        <script>
+            $(document).ready(function () {
+                // Initially hide the dropdown items
+                $(".dropdown-item").hide();
+
+                // Toggle dropdown items on button click
+                $("#btnDropdown").click(function () {
+                    $(".dropdown-item").toggle();
+                });
+
+                // Function to hide/show columns based on checkbox state
+                $("input[type='checkbox']").change(function () {
+                    // Get the checkbox that triggered the change event
+                    var chkBox = $(this);
+
+                    // Get the column number
+                    var columnIndex = chkBox.parent().index() +2; // Index of the parent div + 1
+
+                    // Hide or show the entire column based on the checkbox state
+                    if (chkBox.prop("checked")) {
+                        $('table tr th:nth-child(' + columnIndex + ')').show();
+                        $('table tr td:nth-child(' + columnIndex + ')').show();
+                    } else {
+                        $('table tr th:nth-child(' + columnIndex + ')').hide();
+                        $('table tr td:nth-child(' + columnIndex + ')').hide();
+                    }
+                });
+
+
+            });
+        </script>
+
     </form>
 </asp:Content>

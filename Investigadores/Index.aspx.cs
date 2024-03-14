@@ -74,6 +74,50 @@ namespace SGIPv2.Investigadores
             Response.Redirect("~/Investigadores/CRUD.aspx?id=" + id + "&op=R");
         }
 
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string busqueda = txtBusqueda.Text.Trim();
+
+            string consulta = "SELECT cve_inv, nombre_investigador, ap_pat, ap_mat, correo, cuerpo_academico, SNI, activo FROM Investigador WHERE nombre_investigador LIKE @busqueda OR ap_pat LIKE @busqueda OR ap_mat LIKE @busqueda OR correo LIKE @busqueda or SNI LIKE @busqueda or activo LIKE @busqueda";
+
+            SqlCommand cmd = new SqlCommand(consulta, con);
+            cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
+
+            con.Open();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            dt.Columns.Add("NombreCompleto", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                row["NombreCompleto"] = nombreCompleto;
+            }
+
+            dt.Columns.Remove("nombre_investigador");
+            dt.Columns.Remove("ap_pat");
+            dt.Columns.Remove("ap_mat");
+
+            dt.Columns["cve_inv"].ColumnName = "Clave UASLP";
+            dt.Columns["NombreCompleto"].ColumnName = "Nombre";
+            dt.Columns["Correo"].ColumnName = "Correo";
+            dt.Columns["cuerpo_academico"].ColumnName = "Cuerpo Academico";
+            dt.Columns["SNI"].ColumnName = "SNI";
+            dt.Columns["activo"].ColumnName = "Activo";
+
+            dt.Columns["Clave UASLP"].SetOrdinal(0);
+            dt.Columns["Nombre"].SetOrdinal(1);
+
+            lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
+
+
+            gvinv.DataSource = dt;
+            gvinv.DataBind();
+            con.Close();
+        }
+
+
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
             string id;
