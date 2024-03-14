@@ -29,7 +29,10 @@ namespace SGIPv2.Investigadores
             }
         }
 
-        void CargarTabla()
+
+
+
+            void CargarTabla()
         {
             SqlCommand cmd = new SqlCommand("SELECT * FROM Investigador", con);
             con.Open();
@@ -127,6 +130,47 @@ namespace SGIPv2.Investigadores
                 Response.End();
             }
 
+        }
+
+       
+
+        private DataTable GetDataFromDatabase()
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Investigador", con);
+            con.Open();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            dt.Columns.Add("NombreCompleto", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                row["NombreCompleto"] = nombreCompleto;
+            }
+
+            dt.Columns.Remove("nombre_investigador");
+            dt.Columns.Remove("ap_pat");
+            dt.Columns.Remove("ap_mat");
+
+            dt.Columns["cve_inv"].ColumnName = "Clave UASLP";
+            dt.Columns["NombreCompleto"].ColumnName = "Nombre";
+            dt.Columns["Correo"].ColumnName = "correo";
+            dt.Columns["cuerpo_academico"].ColumnName = "Cuerpo Academico";
+            dt.Columns["SNI"].ColumnName = "SNI";
+            dt.Columns["activo"].ColumnName = "Activo";
+
+            con.Close();
+
+            return dt;
+        }
+
+        private void FilterGridView(DataTable dt, string searchTerm)
+        {
+            DataRow[] filteredRows = dt.Select($"Nombre LIKE '%{searchTerm}%' OR correo LIKE '%{searchTerm}%' OR [Cuerpo Academico] LIKE '%{searchTerm}%' OR SNI LIKE '%{searchTerm}%' OR Activo LIKE '%{searchTerm}%'");
+
+            gvinv.DataSource = filteredRows.Length > 0 ? filteredRows.CopyToDataTable() : dt.Clone();
+            gvinv.DataBind();
         }
 
         protected void btnGenerarExcel_Click(object sender, EventArgs e)

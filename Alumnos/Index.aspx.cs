@@ -44,7 +44,7 @@ namespace SGIPv2.Pages
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura FROM Alumnos", con);
+            SqlCommand cmd = new SqlCommand("SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -53,13 +53,13 @@ namespace SGIPv2.Pages
             dt.Columns.Add("NombreCompleto", typeof(string));
             foreach (DataRow row in dt.Rows) 
             {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
                 row["NombreCompleto"] = nombreCompleto;
             }
 
             dt.Columns.Remove("nombre_alumno");
-            dt.Columns.Remove("ap_pat");
-            dt.Columns.Remove("ap_mat");
+            dt.Columns.Remove("ap_pat_alumno");
+            dt.Columns.Remove("ap_mat_alumno");
 
 
             dt.Columns["cve_alumno"].ColumnName = "Clave UASLP";
