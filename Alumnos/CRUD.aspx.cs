@@ -57,7 +57,7 @@ namespace SGIPv2.Pages
         void CargarDatos()
         {
             con.Open();
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Alumnos WHERE cve_alumno = @cve_alumno", con);
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Alumno WHERE cve_alumno = @cve_alumno", con);
             da.SelectCommand.Parameters.Add("@cve_alumno", SqlDbType.VarChar).Value=aCve;
             DataSet ds = new DataSet();
             ds.Clear();
@@ -66,8 +66,8 @@ namespace SGIPv2.Pages
             DataRow row = dt.Rows[0];
             tbclave.Text = row["cve_alumno"].ToString(); // Establecer la clave del alumno en el textbox
             tbnombre.Text = row["nombre_alumno"].ToString();
-            tbappat.Text = row["ap_pat"].ToString();
-            tbapmat.Text = row["ap_mat"].ToString();
+            tbappat.Text = row["ap_pat_alumno"].ToString();
+            tbapmat.Text = row["ap_mat_alumno"].ToString();
             tblicenciatura.Text = row["licenciatura"].ToString();
             con.Close();
         }
@@ -94,7 +94,7 @@ namespace SGIPv2.Pages
                 return;
             }
 
-            string query = "INSERT INTO Alumnos (cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura) VALUES (@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)";
+            string query = "INSERT INTO Alumno (cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura) VALUES (@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -139,7 +139,7 @@ namespace SGIPv2.Pages
             }
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Alumnos SET nombre_alumno = @Nombre, ap_pat = @ApellidoPaterno, ap_mat = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Alumno SET nombre_alumno = @Nombre, ap_pat_alumno = @ApellidoPaterno, ap_mat_alumno = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
                 con.Open();
                 cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
                 cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
@@ -177,7 +177,7 @@ namespace SGIPv2.Pages
         private bool ClaveExiste(string clave)
         {
             con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Alumnos WHERE cve_alumno = @Cve_alumno", con);
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Alumno WHERE cve_alumno = @Cve_alumno", con);
             cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = clave;
             int count = (int)cmd.ExecuteScalar();
             con.Close();
