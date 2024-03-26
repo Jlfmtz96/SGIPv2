@@ -71,7 +71,7 @@ namespace SGIPv2.Pages
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno WHERE nombre_alumno LIKE @busqueda OR ap_pat_alumno LIKE @busqueda OR ap_mat_alumno LIKE @busqueda";
+            string consulta = "SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno WHERE cve_alumno LIKE @busqueda OR nombre_alumno LIKE @busqueda OR ap_pat_alumno LIKE @busqueda OR ap_mat_alumno LIKE @busqueda";
 
             SqlCommand cmd = new SqlCommand(consulta, con);
             cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
@@ -150,6 +150,19 @@ namespace SGIPv2.Pages
                 // Abrimos el documento
                 document.Open();
 
+
+                // Agregamos el título del reporte
+                Paragraph title = new Paragraph("Reporte de Alumnos");
+                title.Alignment = Element.ALIGN_CENTER;
+                document.Add(title);
+                Paragraph space = new Paragraph("\n"); // Add as many newline characters as you need
+                document.Add(space);
+                DateTime currentDate = DateTime.Now;
+                Paragraph date = new Paragraph("Fecha: " + currentDate.ToString("dd/MM/yyyy")); // Adjust date format as needed
+                date.Alignment = Element.ALIGN_RIGHT; // Align the date to the right
+                document.Add(date);
+                document.Add(space);
+
                 // Creamos una tabla para almacenar los datos del GridView
                 PdfPTable table = new PdfPTable(gvalumnos.Columns.Count + 3); // +1 for header column
 
@@ -195,7 +208,7 @@ namespace SGIPv2.Pages
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/pdf";
-                Response.AddHeader("content-disposition", "attachment;filename=Alumnos.pdf");
+                Response.AddHeader("content-disposition", "attachment;filename=Alumnos " + currentDate + ".pdf");
                 Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 Response.BinaryWrite(ms.ToArray());
                 Response.End();

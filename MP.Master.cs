@@ -25,6 +25,10 @@ namespace SGIPv2
             {
                 activeSection = "investigadores";
             }
+            else if (currentPage.Contains("/Proyectos/"))
+            {
+                activeSection = "proyectos";
+            }
             // Agrega más condiciones según tus necesidades para otras secciones
 
             // Establecer los estilos de los enlaces según la sección activa
@@ -36,11 +40,15 @@ namespace SGIPv2
                 case "investigadores":
                     InvestigadoresLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     break;
+                case "proyectos":
+                    ProyectosLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
+                    break;
                 // Agrega más casos según tus necesidades para otras secciones
                 default:
                     // Enlace por defecto (puedes cambiarlo según tu diseño)
                     AlumnosLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
                     InvestigadoresLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+                    ProyectosLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
                     // Establecer el estilo por defecto también para otros enlaces
                     break;
             }

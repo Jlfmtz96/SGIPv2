@@ -16,7 +16,7 @@ using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
 
 
-namespace SGIPv2.Investigadores
+namespace SGIPv2.Proyectos
 {
     public partial class Index : System.Web.UI.Page
     {
@@ -31,33 +31,30 @@ namespace SGIPv2.Investigadores
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Investigador", con);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Proyecto", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-            dt.Columns.Add("NombreCompleto", typeof(string));
-            foreach (DataRow row in dt.Rows)
-            {
-                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
-                row["NombreCompleto"] = nombreCompleto;
-            }
+          
 
-            dt.Columns.Remove("nombre_investigador");
-            dt.Columns.Remove("ap_pat");
-            dt.Columns.Remove("ap_mat");
+            dt.Columns["cve_proyecto"].ColumnName = "Clave";
+            dt.Columns["titulo_proyecto"].ColumnName = "Titulo";
+            dt.Columns["protocolo"].ColumnName = "Protocolo";
+            dt.Columns["alcance"].ColumnName = "Alcance";
+            dt.Columns["area"].ColumnName = "Area";
+            dt.Columns["fecha_inicio"].ColumnName = "Fecha Inicio";
+            dt.Columns["fecha_fin"].ColumnName = "Fecha Fin";
+            dt.Columns["reg_etica"].ColumnName = "Registro Ética";
+            dt.Columns["lugar_registro"].ColumnName = "Lugar de Registro";
+            dt.Columns["CA"].ColumnName = "Cuerpo Académico";
+            dt.Columns["financiamiento"].ColumnName = "Financiamiento";
+            dt.Columns["grado_posgrado"].ColumnName = "Grado del posgrado";
+            dt.Columns["comentarios"].ColumnName = "Comentarios";
 
-
-            dt.Columns["cve_inv"].ColumnName = "Clave UASLP";
-            dt.Columns["NombreCompleto"].ColumnName = "Nombre";
-            dt.Columns["Correo"].ColumnName = "correo";
-            dt.Columns["cuerpo_academico"].ColumnName = "Cuerpo Academico";
-            dt.Columns["SNI"].ColumnName = "SNI";
-            dt.Columns["activo"].ColumnName = "Activo";
-
-            dt.Columns["Clave UASLP"].SetOrdinal(0);
-            dt.Columns["Nombre"].SetOrdinal(1);
+            dt.Columns["Clave"].SetOrdinal(0);
+            dt.Columns["Titulo"].SetOrdinal(1);
 
 
             gvinv.DataSource = dt;
@@ -71,14 +68,14 @@ namespace SGIPv2.Investigadores
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Investigadores/CRUD.aspx?id=" + id + "&op=R");
+            Response.Redirect("~/Proyectos/CRUD.aspx?id=" + id + "&op=R");
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT cve_inv, nombre_investigador, ap_pat, ap_mat, correo, cuerpo_academico, SNI, activo FROM Investigador WHERE cve_inv LIKE @busqueda OR nombre_investigador LIKE @busqueda OR ap_pat LIKE @busqueda OR ap_mat LIKE @busqueda OR correo LIKE @busqueda or SNI LIKE @busqueda or activo LIKE @busqueda";
+            string consulta = "SELECT cve_proyecto, titulo_proyecto, protocolo, alcance, area, fecha_inicio, fecha_fin, reg_etica , lugar_registro , CA , financiamiento  , grado_posgrado, comentarios FROM Proyecto WHERE cve_proyecto LIKE @busqueda OR titulo_proyecto LIKE @busqueda OR protocolo LIKE @busqueda OR alcance LIKE @busqueda OR area LIKE @busqueda OR reg_etica LIKE @busqueda OR lugar_registro LIKE @busqueda OR CA LIKE @busqueda OR financiamiento LIKE @busqueda OR grado_posgrado LIKE @busqueda OR comentarios LIKE @busqueda";
 
 
 
@@ -90,26 +87,23 @@ namespace SGIPv2.Investigadores
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-            dt.Columns.Add("NombreCompleto", typeof(string));
-            foreach (DataRow row in dt.Rows)
-            {
-                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
-                row["NombreCompleto"] = nombreCompleto;
-            }
 
-            dt.Columns.Remove("nombre_investigador");
-            dt.Columns.Remove("ap_pat");
-            dt.Columns.Remove("ap_mat");
+            dt.Columns["cve_proyecto"].ColumnName = "Clave";
+            dt.Columns["titulo_proyecto"].ColumnName = "Título";
+            dt.Columns["protocolo"].ColumnName = "Protocolo";
+            dt.Columns["alcance"].ColumnName = "Alcance";
+            dt.Columns["area"].ColumnName = "Área";
+            dt.Columns["fecha_inicio"].ColumnName = "Fecha de inicio";
+            dt.Columns["fecha_fin"].ColumnName = "Fecha de fin";
+            dt.Columns["reg_etica"].ColumnName = "Registro de ética";
+            dt.Columns["lugar_registro"].ColumnName = "Lugar de registro";
+            dt.Columns["CA"].ColumnName = "Cuerpo académico";
+            dt.Columns["financiamiento"].ColumnName = "Financiamiento";
+            dt.Columns["grado_posgrado"].ColumnName = "Grado del posgrado";
+            dt.Columns["comentarios"].ColumnName = "Comentarios";
 
-            dt.Columns["cve_inv"].ColumnName = "Clave UASLP";
-            dt.Columns["NombreCompleto"].ColumnName = "Nombre";
-            dt.Columns["Correo"].ColumnName = "Correo";
-            dt.Columns["cuerpo_academico"].ColumnName = "Cuerpo Academico";
-            dt.Columns["SNI"].ColumnName = "SNI";
-            dt.Columns["activo"].ColumnName = "Activo";
-
-            dt.Columns["Clave UASLP"].SetOrdinal(0);
-            dt.Columns["Nombre"].SetOrdinal(1);
+            dt.Columns["Clave"].SetOrdinal(0);
+            dt.Columns["Título"].SetOrdinal(1);
 
             lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
 
@@ -126,7 +120,7 @@ namespace SGIPv2.Investigadores
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Investigadores/CRUD.aspx?id=" + id + "&op=U");
+            Response.Redirect("~/Proyectos/CRUD.aspx?id=" + id + "&op=U");
         }
 
         protected void BtnDelete_Click(object sender, EventArgs e)
@@ -135,12 +129,12 @@ namespace SGIPv2.Investigadores
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Investigadores/CRUD.aspx?id=" + id + "&op=D");
+            Response.Redirect("~/Proyectos/CRUD.aspx?id=" + id + "&op=D");
         }
 
         protected void BtnCreate_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Investigadores/CRUD.aspx?op=C");
+            Response.Redirect("~/Proyectos/CRUD.aspx?op=C");
         }
 
         protected void btnGenerarPDF_Click(object sender, EventArgs e)
@@ -168,7 +162,7 @@ namespace SGIPv2.Investigadores
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/pdf";
-                Response.AddHeader("content-disposition", "attachment;filename=Investigadores.pdf");
+                Response.AddHeader("content-disposition", "attachment;filename=Proyectos.pdf");
                 Response.BinaryWrite(ms.ToArray());
                 Response.End();
             }
@@ -201,12 +195,13 @@ namespace SGIPv2.Investigadores
                     Response.Clear();
                     Response.Buffer = true;
                     Response.ContentType = "application/vnd.ms-excel";
-                    Response.AddHeader("content-disposition", "attachment;filename=Investigadores.xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=Proyectos.xls");
                     Response.Charset = "";
                     Response.Output.Write(sw.ToString());
                     Response.End();
                 }
             }
         }
+
     }
 }
