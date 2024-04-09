@@ -101,7 +101,7 @@
                     <a href="Investigadores/Index.aspx" runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Investigadores</a>
                     <a href="Proyectos/Index.aspx" runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Proyectos</a>
                     <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Publicaciones</a>
-                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Revistas</a>
+                    <a href="Revistas/Index.aspx" runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Revistas</a>
                 </div>
             </div>
         </nav>
@@ -119,7 +119,7 @@
                                 <asp:HyperLink runat="server" ID="InvestigadoresLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
                                 <asp:HyperLink runat="server" ID="ProyectosLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Proyectos/Index.aspx" Text="Proyectos" />
                                 <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="#" Text="Publicaciones" />
-                                <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="#" Text="Revistas" />
+                                <asp:HyperLink runat="server" ID="RevistasLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Revistas/Index.aspx" Text="Revistas" />
                             </div>
                         </div>
                     </div>
