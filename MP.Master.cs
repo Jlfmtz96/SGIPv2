@@ -11,21 +11,49 @@ namespace SGIPv2
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            if (!Request.Url.AbsolutePath.ToLower().Contains("/login/login.aspx"))
+            {
+                // Check if the session has expired and the current page is not the login page
+                if (Session["loggedIn"] == null || !(bool)Session["loggedIn"])
+                {
+                    // Redirect the user to the login page
+                    Response.Redirect("~/Login/Login.aspx");
+                }
+            }
+
+            if (!IsPostBack)
+            {
+                // Check if the session is logged in or not
+                if (Session["loggedIn"] != null && (bool)Session["loggedIn"])
+                {
+                    // If logged in, set the text of the label to the username
+                    lblUsername.Text = Session["usuariologueado"].ToString();
+                    navbarsesion.Visible = true; // Show the logout button
+                }
+                else
+                {
+                    // If not logged in, set the text of the label to "Iniciar Sesión"
+                    lblUsername.Text = "Iniciar Sesión";
+                    navbarsesion.Visible = false; // Hide the logout button
+                }
+            }
+
             // Obtener la ruta de la página actual desde la URL de la solicitud
             string currentPage = Request.Url.AbsolutePath.ToLower();
 
             // Determinar la sección activa basada en la URL
             string activeSection = "inicio"; // Sección activa por defecto
 
-            if (currentPage.Contains("/Alumnos/"))
+            if (currentPage.Contains("/alumnos/"))
             {
                 activeSection = "alumnos";
             }
-            else if (currentPage.Contains("/Investigadores/"))
+            else if (currentPage.Contains("/investigadores/"))
             {
                 activeSection = "investigadores";
             }
-            else if (currentPage.Contains("/Proyectos/"))
+            else if (currentPage.Contains("/proyectos/"))
             {
                 activeSection = "proyectos";
             }
@@ -52,6 +80,30 @@ namespace SGIPv2
                     // Establecer el estilo por defecto también para otros enlaces
                     break;
             }
+        }
+
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            // Remove session variables
+            Session.Remove("usuariologueado");
+            Session["loggedIn"] = false;
+
+            // Redirect to login page
+            Response.Redirect("~/Login/Login.aspx");
+        }
+
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            // Check if the session is logged in or not
+            if (Session["loggedIn"] == null || !(bool)Session["loggedIn"])
+            {
+                // If not logged in, hide the div
+                navbarsesion.Style["display"] = "none";
+
+            }
+
+
         }
     }
 }

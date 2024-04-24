@@ -111,7 +111,7 @@ namespace SGIPv2.Investigadores
             dt.Columns["Clave UASLP"].SetOrdinal(0);
             dt.Columns["Nombre"].SetOrdinal(1);
 
-            lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
+            //lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
 
 
             gvinv.DataSource = dt;

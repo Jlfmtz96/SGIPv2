@@ -105,7 +105,7 @@ namespace SGIPv2.Proyectos
             dt.Columns["Clave"].SetOrdinal(0);
             dt.Columns["Título"].SetOrdinal(1);
 
-            lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
+           //lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
 
 
             gvinv.DataSource = dt;
