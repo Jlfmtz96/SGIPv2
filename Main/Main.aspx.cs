@@ -11,7 +11,16 @@ namespace SGIPv2.Main
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["loggedIn"] != null && (bool)Session["loggedIn"] == true)
+            {
+                string usuariologueado = Session["usuariologueado"].ToString();
+                lblBienvenida.Text = "Bienvenido/a " + usuariologueado;
+            }
+            else
+            {
+                Response.Redirect("../Login/Login.aspx");
+            }
         }
+
     }
 }

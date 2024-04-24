@@ -80,9 +80,12 @@
     <Content Include="Alumnos\Index.aspx" />
     <Content Include="Investigadores\CRUD.aspx" />
     <Content Include="Investigadores\Index.aspx" />
+    <Content Include="Login\Login.aspx" />
     <Content Include="Main\Main.aspx" />
     <Content Include="Proyectos\CRUD.aspx" />
     <Content Include="Proyectos\Index.aspx" />
+    <Content Include="Revistas\CRUD.aspx" />
+    <Content Include="Revistas\Index.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +102,13 @@
     </Compile>
     <Compile Include="Investigadores\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Main\Main.aspx.cs">
       <DependentUpon>Main.aspx</DependentUpon>
@@ -141,6 +151,20 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Proyectos\Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Revistas\CRUD.aspx.cs">
+      <DependentUpon>CRUD.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Revistas\CRUD.aspx.designer.cs">
+      <DependentUpon>CRUD.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Revistas\Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Revistas\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
