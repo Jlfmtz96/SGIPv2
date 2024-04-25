@@ -102,7 +102,7 @@ namespace SGIPv2.Publicaciones
                 return;
             }
 
-            string query = "INSERT INTO Producto_investigacion (ID_producto, titulo_producto, fecha_publicacion, tipo_pi, lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
+            string query = "INSERT INTO Producto_investigacion (ID_producto, titulo_producto, fecha_publicacion, tipo_PI, lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
