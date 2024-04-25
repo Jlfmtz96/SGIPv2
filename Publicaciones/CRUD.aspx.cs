@@ -133,7 +133,43 @@ namespace SGIPv2.Publicaciones
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
+            string clave = tbclave.Text;
+            string titulo = tbtitulo.Text;
+            string fecha = tbfpub.Text;
+            string tipo = tbtipo.Text;
+            string lugar = tblugar.Text;
 
+            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fecha) || string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
+            {
+                lblErrorMessage.Text = "Todos los campos son obligatorios.";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
+                return;
+            }
+            try
+            {
+                SqlCommand cmd = new SqlCommand("UPDATE Publicacion SET titulo_producto = @Titulo, fecha_publicacion = @Fecha, tipo_pi = @Tipo, lugar_publicacion = @Lugar WHERE ID_producto = @Clave", con);
+                con.Open();
+                cmd.Parameters.Add("@Clave", SqlDbType.VarChar).Value = clave;
+                cmd.Parameters.Add("@Titulo", SqlDbType.VarChar).Value = titulo;
+                cmd.Parameters.Add("@Fecha", SqlDbType.VarChar).Value = fecha;
+                cmd.Parameters.Add("@Tipo", SqlDbType.VarChar).Value = tipo;
+                cmd.Parameters.Add("@Lugar", SqlDbType.VarChar).Value = lugar;
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+                con.Close();
+
+                // Mostrar mensaje de éxito
+                lblSuccessMessage.Text = "Publicación actualizada satisfactoriamente.";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
+                //System.Threading.Thread.Sleep(3000);
+                //Response.Redirect("Index.aspx");
+                ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { window.location.href = 'Index.aspx'; }, 2000);", true);
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Text = "Error al actualizar la publicación: " + ex.Message;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
+            }
         }
 
         protected void BtnVolver_Click(object sender, EventArgs e)

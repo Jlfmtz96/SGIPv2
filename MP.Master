@@ -20,6 +20,24 @@
     </title>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
+
+    <style>
+        .bg-slate-100 {
+            background-color: #f8fafc; /* Color de fondo del nav */
+        }
+
+        .nav-link {
+            color: #000; /* Color del texto del enlace */
+            padding: 8px 12px; /* Espaciado interno del enlace */
+            text-decoration: none; /* Quitar subrayado del enlace */
+        }
+
+        .active-link {
+            background-color: #004a98; /* Color de fondo activo */
+            color: white; /* Color del texto activo */
+            /* Otros estilos para el enlace activo */
+        }
+    </style>
     
 
 
@@ -118,11 +136,11 @@
          <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
              <div class="hidden sm:ml-6 sm:block">
                  <div class="flex space-x-4">
-                     <asp:HyperLink runat="server" ID="AlumnosLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
-                     <asp:HyperLink runat="server" ID="InvestigadoresLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
-                     <asp:HyperLink runat="server" ID="ProyectosLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Proyectos/Index.aspx" Text="Proyectos" />
-                     <asp:HyperLink runat="server" class="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Publicaciones/Index.aspx" Text="Publicaciones" />
-                     <asp:HyperLink runat="server" ID="RevistasLink" CssClass="hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium" NavigateUrl="~/Revistas/Index.aspx" Text="Revistas" />
+                     <asp:HyperLink runat="server" ID="AlumnosLink" CssClass="nav-link" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
+                     <asp:HyperLink runat="server" ID="InvestigadoresLink" CssClass="nav-link" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
+                     <asp:HyperLink runat="server" ID="ProyectosLink" CssClass="nav-link" NavigateUrl="~/Proyectos/Index.aspx" Text="Proyectos" />
+                     <asp:HyperLink runat="server" ID="PublicacionesLink" class="nav-link" NavigateUrl="~/Publicaciones/Index.aspx" Text="Publicaciones" />
+                     <asp:HyperLink runat="server" ID="RevistasLink" CssClass="nav-link" NavigateUrl="~/Revistas/Index.aspx" Text="Revistas" />
                  </div>
              </div>
          </div>
@@ -176,6 +194,27 @@
 
     </footer>
   <script>
+      // Obtener la ruta de la página actual desde la URL de la solicitud
+      var currentPage = window.location.pathname.toLowerCase();
+
+      // Establecer los estilos de los enlaces según la página actual
+      document.addEventListener('DOMContentLoaded', function () {
+          var alumnosLink = document.getElementById('<%= AlumnosLink.ClientID %>');
+          var investigadoresLink = document.getElementById('<%= InvestigadoresLink.ClientID %>');
+    var proyectosLink = document.getElementById('<%= ProyectosLink.ClientID %>');
+          var revistasLink = document.getElementById('<%= RevistasLink.ClientID %>');
+
+          if (currentPage.includes("alumnos")) {
+              alumnosLink.classList.add("active-link");
+          } else if (currentPage.includes("investigadores")) {
+              investigadoresLink.classList.add("active-link");
+          } else if (currentPage.includes("proyectos")) {
+              proyectosLink.classList.add("active-link");
+          } else if (currentPage.includes("revistas")) {
+              revistasLink.classList.add("active-link");
+          }
+      });
+
       // Function to toggle dropdown
       function toggleDropdown() {
           var dropdown = document.getElementById('dropdown-menu');
