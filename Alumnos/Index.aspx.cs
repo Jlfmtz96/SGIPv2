@@ -16,7 +16,7 @@ namespace SGIPv2.Pages
 {
     public partial class Index : System.Web.UI.Page
     {
-        readonly SqlConnection con=new SqlConnection(ConfigurationManager.ConnectionStrings["conexion"].ConnectionString);
+        readonly SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexion"].ConnectionString);
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -35,7 +35,7 @@ namespace SGIPv2.Pages
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura FROM Alumnos", con);
+            SqlCommand cmd = new SqlCommand("SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -44,13 +44,13 @@ namespace SGIPv2.Pages
             dt.Columns.Add("NombreCompleto", typeof(string));
             foreach (DataRow row in dt.Rows)
             {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
                 row["NombreCompleto"] = nombreCompleto;
             }
 
             dt.Columns.Remove("nombre_alumno");
-            dt.Columns.Remove("ap_pat");
-            dt.Columns.Remove("ap_mat");
+            dt.Columns.Remove("ap_pat_alumno");
+            dt.Columns.Remove("ap_mat_alumno");
 
             dt.Columns["cve_alumno"].ColumnName = "Clave UASLP";
             dt.Columns["NombreCompleto"].ColumnName = "Nombre";
@@ -59,7 +59,7 @@ namespace SGIPv2.Pages
             dt.Columns["Clave UASLP"].SetOrdinal(0);
             dt.Columns["Nombre"].SetOrdinal(1);
 
-           // lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
+            // lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
 
             gvalumnos.DataSource = dt;
             gvalumnos.DataBind();
@@ -71,7 +71,7 @@ namespace SGIPv2.Pages
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT cve_alumno, nombre_alumno, ap_pat, ap_mat, licenciatura FROM Alumnos WHERE cve_alumno LIKE @busqueda OR nombre_alumno LIKE @busqueda OR ap_pat LIKE @busqueda OR ap_mat LIKE @busqueda";
+            string consulta = "SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno WHERE cve_alumno LIKE @busqueda OR nombre_alumno LIKE @busqueda OR ap_pat_alumno LIKE @busqueda OR ap_mat_alumno LIKE @busqueda";
 
             SqlCommand cmd = new SqlCommand(consulta, con);
             cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
@@ -84,13 +84,13 @@ namespace SGIPv2.Pages
             dt.Columns.Add("NombreCompleto", typeof(string));
             foreach (DataRow row in dt.Rows)
             {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
                 row["NombreCompleto"] = nombreCompleto;
             }
 
             dt.Columns.Remove("nombre_alumno");
-            dt.Columns.Remove("ap_pat");
-            dt.Columns.Remove("ap_mat");
+            dt.Columns.Remove("ap_pat_alumno");
+            dt.Columns.Remove("ap_mat_alumno");
 
             dt.Columns["cve_alumno"].ColumnName = "Clave UASLP";
             dt.Columns["NombreCompleto"].ColumnName = "Nombre";
@@ -115,7 +115,7 @@ namespace SGIPv2.Pages
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Alumnos/CRUD.aspx?id="+id+"&op=R");
+            Response.Redirect("~/Alumnos/CRUD.aspx?id=" + id + "&op=R");
         }
 
         protected void BtnUpdate_Click(object sender, EventArgs e)

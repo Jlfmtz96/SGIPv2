@@ -57,7 +57,7 @@ namespace SGIPv2.Publicaciones
         void CargarDatos()
         {
             con.Open();
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Publicacion WHERE ID_producto = @ID_producto", con);
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Producto_investigacion WHERE ID_producto = @ID_producto", con);
             da.SelectCommand.Parameters.Add("@ID_producto", SqlDbType.VarChar).Value = aCve;
             DataSet ds = new DataSet();
             ds.Clear();
@@ -102,7 +102,7 @@ namespace SGIPv2.Publicaciones
                 return;
             }
 
-            string query = "INSERT INTO Publicacion (ID_producto, titulo_producto, fecha_publicacion, tipo_pi, lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
+            string query = "INSERT INTO Producto_investigacion (ID_producto, titulo_producto, fecha_publicacion, tipo_pi, lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -138,7 +138,7 @@ namespace SGIPv2.Publicaciones
 
         protected void BtnVolver_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("Index.aspx");
         }
 
         protected void BtnDelete_Click(object sender, EventArgs e)
@@ -149,7 +149,7 @@ namespace SGIPv2.Publicaciones
         private bool ClaveExiste(string clave)
         {
             con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Publicacion WHERE ID_producto = @ID_producto", con);
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Producto_investigacion WHERE ID_producto = @ID_producto", con);
             cmd.Parameters.Add("@ID_producto", SqlDbType.VarChar).Value = clave;
             int count = (int)cmd.ExecuteScalar();
             con.Close();
