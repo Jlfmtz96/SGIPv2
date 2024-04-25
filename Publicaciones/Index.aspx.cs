@@ -57,7 +57,11 @@ namespace SGIPv2.Publicaciones
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
-
+            string id;
+            Button BtnConsultar = (Button)sender;
+            GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
+            id = selectedrow.Cells[1].Text;
+            Response.Redirect("~/Publicaciones/CRUD.aspx?id=" + id + "&op=U");
         }
 
         protected void BtnRead_Click(object sender, EventArgs e)
