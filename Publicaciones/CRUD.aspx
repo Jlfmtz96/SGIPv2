@@ -43,21 +43,21 @@
         <div class="space-y-12">
             <div class="grid grid-cols-1 gap-x-6 gap-y-8">
                 <div class="col-span-full">
-                  <label class="block text-sm font-medium leading-6 text-gray-900">Id del Producto</label>
+                  <label class="block text-sm font-medium leading-6 text-gray-900">Id del Producto*</label>
                   <div class="mt-2">
                     <asp:TextBox runat="server" Enabled="false" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbclave" style="width: 350px;"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
-                  <label class="block text-sm font-medium leading-6 text-gray-900">Titulo</label>
+                  <label class="block text-sm font-medium leading-6 text-gray-900">Titulo*</label>
                   <div class="mt-2">
                     <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtitulo" style="width: 350px;"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
-                    <label class="block text-sm font-medium leading-6 text-gray-900">Fecha de publicación</label>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Fecha de publicación*</label>
                     <div class="mt-2">
                         <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbfpub" style="width: 350px;"></asp:TextBox>
                         <ajaxToolkit:CalendarExtender ID="calExtPub" runat="server" TargetControlID="tbfpub" PopupButtonID="btnCalPub" />
@@ -66,14 +66,14 @@
                 </div>
 
                 <div class="col-span-full">
-                  <label class="block text-sm font-medium leading-6 text-gray-900">Tipo</label>
+                  <label class="block text-sm font-medium leading-6 text-gray-900">Tipo*</label>
                   <div class="mt-2">
                     <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtipo" style="width: 350px;"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
-                  <label class="block text-sm font-medium leading-6 text-gray-900">Lugar</label>
+                  <label class="block text-sm font-medium leading-6 text-gray-900">Lugar*</label>
                   <div class="mt-2">
                     <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tblugar" style="width: 350px;"></asp:TextBox>
                   </div>

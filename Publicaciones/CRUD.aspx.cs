@@ -147,11 +147,11 @@ namespace SGIPv2.Publicaciones
             }
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Publicacion SET titulo_producto = @Titulo, fecha_publicacion = @Fecha, tipo_pi = @Tipo, lugar_publicacion = @Lugar WHERE ID_producto = @Clave", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Producto_investigacion SET titulo_producto = @Titulo, fecha_publicacion = @Fecha, tipo_PI = @Tipo, lugar_publicacion = @Lugar WHERE ID_producto = @Clave", con);
                 con.Open();
                 cmd.Parameters.Add("@Clave", SqlDbType.VarChar).Value = clave;
                 cmd.Parameters.Add("@Titulo", SqlDbType.VarChar).Value = titulo;
-                cmd.Parameters.Add("@Fecha", SqlDbType.VarChar).Value = fecha;
+                cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = Convert.ToDateTime(fecha).Date;
                 cmd.Parameters.Add("@Tipo", SqlDbType.VarChar).Value = tipo;
                 cmd.Parameters.Add("@Lugar", SqlDbType.VarChar).Value = lugar;
 

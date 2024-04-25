@@ -99,19 +99,28 @@ namespace SGIPv2.Publicaciones
 
         protected void btnGenerarPDF_Click(object sender, EventArgs e)
         {
+            // Creamos un MemoryStream para almacenar la salida PDF
             using (MemoryStream ms = new MemoryStream())
             {
+                // Inicializamos un documento PDF
                 Document document = new Document();
+
+                // Inicializamos PdfWriter con el MemoryStream
                 PdfWriter.GetInstance(document, ms);
+
+                // Abrimos el documento
                 document.Open();
 
+                // Agregamos el título del reporte
                 Paragraph title = new Paragraph("Reporte de Publicaciones");
                 title.Alignment = Element.ALIGN_CENTER;
                 document.Add(title);
 
+                // Agregamos espacio adicional
                 Paragraph space = new Paragraph("\n");
                 document.Add(space);
 
+                // Agregamos la fecha actual
                 DateTime currentDate = DateTime.Now;
                 Paragraph date = new Paragraph("Fecha: " + currentDate.ToString("dd/MM/yyyy"));
                 date.Alignment = Element.ALIGN_RIGHT;
@@ -119,48 +128,55 @@ namespace SGIPv2.Publicaciones
 
                 document.Add(space);
 
-                // Create PdfPTable with the correct number of columns
-                PdfPTable table = new PdfPTable(gvpublicaciones.Rows[0].Cells.Count - 1); // Adjusted to exclude the first column
-
-                // Add header cells to table (from the header row of the GridView), excluding the first column
-                foreach (TableCell headerCell in gvpublicaciones.HeaderRow.Cells)
+                // Verificamos que el GridView tiene al menos dos columnas
+                int columnCount = gvpublicaciones.Columns.Count + 5;
+                if (columnCount <= 1)
                 {
-                    if (headerCell.Visible) // Skip the first column if it's not visible (contains button information)
+                    throw new InvalidOperationException("El GridView debe tener al menos dos columnas para crear el PDF.");
+                }
+
+                // Creamos una tabla para almacenar los datos del GridView
+                PdfPTable table = new PdfPTable(columnCount - 1); // Restamos una columna para omitir la primera
+
+                // Agregamos las cabeceras de las columnas al PDF, omitiendo la primera
+                for (int i = 1; i < columnCount; i++) // Comenzamos desde la segunda columna
+                {
+                    TableCell headerCell = gvpublicaciones.HeaderRow.Cells[i];
+                    PdfPCell cell = new PdfPCell(new Phrase(headerCell.Text));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.BackgroundColor = new BaseColor(240, 240, 240);
+                    table.AddCell(cell);
+                }
+
+                // Agregamos los datos del GridView, omitiendo la primera columna
+                for (int i = 0; i < gvpublicaciones.Rows.Count; i++)
+                {
+                    for (int j = 1; j < columnCount; j++) // Comenzamos desde la segunda columna
                     {
-                        PdfPCell pdfCell = new PdfPCell(new Phrase(HttpUtility.HtmlDecode(headerCell.Text)));
+                        TableCell cell = gvpublicaciones.Rows[i].Cells[j];
+                        PdfPCell pdfCell = new PdfPCell(new Phrase(cell.Text));
                         pdfCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                        pdfCell.BackgroundColor = new BaseColor(240, 240, 240);
                         table.AddCell(pdfCell);
                     }
                 }
 
-                // Add data cells to table (from the data rows of the GridView), excluding the first column
-                for (int i = 0; i < gvpublicaciones.Rows.Count; i++)
-                {
-                    for (int j = 1; j < gvpublicaciones.Rows[i].Cells.Count; j++) // Start from index 1 to skip the first column
-                    {
-                        if (gvpublicaciones.Rows[i].Cells[j].Visible) // Skip the cell if it's not visible (belongs to the first column)
-                        {
-                            PdfPCell pdfCell = new PdfPCell();
-                            pdfCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                            pdfCell.Phrase = new Phrase(HttpUtility.HtmlDecode(gvpublicaciones.Rows[i].Cells[j].Text));
-                            table.AddCell(pdfCell);
-                        }
-                    }
-                }
-
+                // Agregamos la tabla al documento
                 document.Add(table);
+
+                // Cerramos el documento
                 document.Close();
 
+                // Escribimos el contenido del MemoryStream en la respuesta
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/pdf";
-                Response.AddHeader("content-disposition", "attachment;filename=Publicaciones_" + currentDate.ToString("yyyyMMddHHmmss") + ".pdf");
+                Response.AddHeader("content-disposition", "attachment;filename=Publicaciones " + currentDate.ToString("dd-MM-yyyy") + ".pdf");
                 Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 Response.BinaryWrite(ms.ToArray());
                 Response.End();
             }
         }
+
 
 
 

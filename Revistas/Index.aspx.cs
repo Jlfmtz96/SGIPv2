@@ -129,7 +129,7 @@ namespace SGIPv2.Revistas
             Response.Redirect("~/Revistas/CRUD.aspx?id=" + id + "&op=D");
         }
 
-        protected void btnGenerarPDF_Click(object sender, EventArgs e)
+        /*protected void btnGenerarPDF_Click(object sender, EventArgs e)
         {
             // Creamos un MemoryStream para almacenar la salida PDF
             using (MemoryStream ms = new MemoryStream())
@@ -157,13 +157,7 @@ namespace SGIPv2.Revistas
                 document.Add(space);
 
                 // Creamos una tabla para almacenar los datos del GridView
-                PdfPTable table = new PdfPTable(gvrevistas.Columns.Count + 3); // +1 for header column
-
-                // Agregamos la fila de cabecera para los nombres de los estudiantes
-                PdfPCell nameHeaderCell = new PdfPCell(new Phrase("Name"));
-                nameHeaderCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                nameHeaderCell.BackgroundColor = new BaseColor(240, 240, 240);
-                table.AddCell(nameHeaderCell);
+                PdfPTable table = new PdfPTable(gvrevistas.Columns.Count +4); // +1 for header column
 
                 // Agregamos las cabeceras de las columnas al PDF (atributos de los alumnos)
                 foreach (TableCell headerCell in gvrevistas.HeaderRow.Cells)
@@ -177,7 +171,7 @@ namespace SGIPv2.Revistas
                 // Transponemos los datos y los agregamos a la tabla del PDF
                 for (int i = 0; i < gvrevistas.Rows.Count; i++)
                 {
-                    table.AddCell(new Phrase(gvrevistas.Rows[i].Cells[1].Text)); // Student name
+                    //table.AddCell(new Phrase(gvrevistas.Rows[i].Cells[1].Text)); // Student name
 
                     // Datos de los estudiantes (los demás atributos)
                     foreach (TableCell cell in gvrevistas.Rows[i].Cells)
@@ -201,12 +195,93 @@ namespace SGIPv2.Revistas
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/pdf";
-                Response.AddHeader("content-disposition", "attachment;filename=Alumnos " + currentDate + ".pdf");
+                Response.AddHeader("content-disposition", "attachment;filename=Revistas " + currentDate + ".pdf");
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.BinaryWrite(ms.ToArray());
+                Response.End();
+            }
+        }*/
+
+        protected void btnGenerarPDF_Click(object sender, EventArgs e)
+        {
+            // Creamos un MemoryStream para almacenar la salida PDF
+            using (MemoryStream ms = new MemoryStream())
+            {
+                // Inicializamos un documento PDF
+                Document document = new Document();
+
+                // Inicializamos PdfWriter con el MemoryStream
+                PdfWriter.GetInstance(document, ms);
+
+                // Abrimos el documento
+                document.Open();
+
+                // Agregamos el título del reporte
+                Paragraph title = new Paragraph("Reporte de Revistas");
+                title.Alignment = Element.ALIGN_CENTER;
+                document.Add(title);
+
+                // Agregamos espacio adicional
+                Paragraph space = new Paragraph("\n");
+                document.Add(space);
+
+                // Agregamos la fecha actual
+                DateTime currentDate = DateTime.Now;
+                Paragraph date = new Paragraph("Fecha: " + currentDate.ToString("dd/MM/yyyy"));
+                date.Alignment = Element.ALIGN_RIGHT;
+                document.Add(date);
+
+                document.Add(space);
+
+                // Verificamos que el GridView tiene al menos dos columnas
+                int columnCount = gvrevistas.Columns.Count+4;
+                if (columnCount <= 1)
+                {
+                    throw new InvalidOperationException("El GridView debe tener al menos dos columnas para crear el PDF.");
+                }
+
+                // Creamos una tabla para almacenar los datos del GridView
+                PdfPTable table = new PdfPTable(columnCount -1); // Restamos una columna para omitir la primera
+
+                // Agregamos las cabeceras de las columnas al PDF, omitiendo la primera
+                for (int i = 1; i < columnCount; i++) // Comenzamos desde la segunda columna
+                {
+                    TableCell headerCell = gvrevistas.HeaderRow.Cells[i];
+                    PdfPCell cell = new PdfPCell(new Phrase(headerCell.Text));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.BackgroundColor = new BaseColor(240, 240, 240);
+                    table.AddCell(cell);
+                }
+
+                // Agregamos los datos del GridView, omitiendo la primera columna
+                for (int i = 0; i < gvrevistas.Rows.Count; i++)
+                {
+                    for (int j = 1; j < columnCount; j++) // Comenzamos desde la segunda columna
+                    {
+                        TableCell cell = gvrevistas.Rows[i].Cells[j];
+                        PdfPCell pdfCell = new PdfPCell(new Phrase(cell.Text));
+                        pdfCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        table.AddCell(pdfCell);
+                    }
+                }
+
+                // Agregamos la tabla al documento
+                document.Add(table);
+
+                // Cerramos el documento
+                document.Close();
+
+                // Escribimos el contenido del MemoryStream en la respuesta
+                Response.Clear();
+                Response.Buffer = true;
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", "attachment;filename=Revistas " + currentDate.ToString("dd-MM-yyyy") + ".pdf");
                 Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 Response.BinaryWrite(ms.ToArray());
                 Response.End();
             }
         }
+
 
 
         protected void btnGenerarExcel_Click(object sender, EventArgs e)
@@ -217,6 +292,7 @@ namespace SGIPv2.Revistas
                 // Creamos un formulario temporal y agregamos el control GridView a ese formulario
                 using (HtmlTextWriter hw = new HtmlTextWriter(sw))
                 {
+                    DateTime currentDate = DateTime.Now;
                     Page page = new Page();
                     HtmlForm form = new HtmlForm();
                     gvrevistas.EnableViewState = false; // Asegúrate de deshabilitar la vista de estado si no es necesario
@@ -249,7 +325,7 @@ namespace SGIPv2.Revistas
                     Response.Clear();
                     Response.Buffer = true;
                     Response.ContentType = "application/vnd.ms-excel";
-                    Response.AddHeader("content-disposition", "attachment;filename=Alumnos.xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=Revistas" + currentDate + ".xls");
                     Response.Charset = "";
                     Response.Output.Write(sw.ToString());
                     Response.End();

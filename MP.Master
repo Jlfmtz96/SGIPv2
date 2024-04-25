@@ -122,7 +122,7 @@
                     <a href="~/Alumnos/Index.aspx" runat="server" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Alumnos</a>
                     <a href="Investigadores/Index.aspx" runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Investigadores</a>
                     <a href="Proyectos/Index.aspx" runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Proyectos</a>
-                    <a href="Publicaciones/Index.aspx" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Publicaciones</a>
+                    <a href="Publicaciones/Index.aspx"  runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Publicaciones</a>
                     <a href="Revistas/Index.aspx" runat="server" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Revistas</a>
                 </div>
             </div>
@@ -139,7 +139,7 @@
                      <asp:HyperLink runat="server" ID="AlumnosLink" CssClass="nav-link" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
                      <asp:HyperLink runat="server" ID="InvestigadoresLink" CssClass="nav-link" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
                      <asp:HyperLink runat="server" ID="ProyectosLink" CssClass="nav-link" NavigateUrl="~/Proyectos/Index.aspx" Text="Proyectos" />
-                     <asp:HyperLink runat="server" ID="PublicacionesLink" class="nav-link" NavigateUrl="~/Publicaciones/Index.aspx" Text="Publicaciones" />
+                     <asp:HyperLink runat="server" ID="PublicacionesLink" CssClass="nav-link" NavigateUrl="~/Publicaciones/Index.aspx" Text="Publicaciones" />
                      <asp:HyperLink runat="server" ID="RevistasLink" CssClass="nav-link" NavigateUrl="~/Revistas/Index.aspx" Text="Revistas" />
                  </div>
              </div>
@@ -201,7 +201,8 @@
       document.addEventListener('DOMContentLoaded', function () {
           var alumnosLink = document.getElementById('<%= AlumnosLink.ClientID %>');
           var investigadoresLink = document.getElementById('<%= InvestigadoresLink.ClientID %>');
-    var proyectosLink = document.getElementById('<%= ProyectosLink.ClientID %>');
+          var proyectosLink = document.getElementById('<%= ProyectosLink.ClientID %>');
+          var publicacionesLink = document.getElementById('<%= PublicacionesLink.ClientID %>');
           var revistasLink = document.getElementById('<%= RevistasLink.ClientID %>');
 
           if (currentPage.includes("alumnos")) {
@@ -212,6 +213,8 @@
               proyectosLink.classList.add("active-link");
           } else if (currentPage.includes("revistas")) {
               revistasLink.classList.add("active-link");
+          } else if (currentPage.includes("publicaciones")) {
+              publicacionesLink.classList.add("active-link");
           }
       });
 
