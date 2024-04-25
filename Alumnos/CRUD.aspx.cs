@@ -68,7 +68,7 @@ namespace SGIPv2.Pages
             tbnombre.Text = row["nombre_alumno"].ToString();
             tbappat.Text = row["ap_pat_alumno"].ToString();
             tbapmat.Text = row["ap_mat_alumno"].ToString();
-            tblicenciatura.Text = row["licenciatura"].ToString();
+            ddlLicenciatura.Text = row["licenciatura"].ToString();
             con.Close();
         }
 
@@ -78,11 +78,11 @@ namespace SGIPv2.Pages
             string nombre = tbnombre.Text;
             string appat = tbappat.Text;
             string apmat = tbapmat.Text;
-            string licenciatura = tblicenciatura.Text;
+            string licenciatura = ddlLicenciatura.Text;
 
-            if(string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(appat) || string.IsNullOrWhiteSpace(apmat) || string.IsNullOrWhiteSpace(licenciatura))
+            if(string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(licenciatura))
             {
-                lblErrorMessage.Text = "Todos los campos son obligatorios.";
+                lblErrorMessage.Text = "Complete los campos obligatorios";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
                 return;
             }
@@ -98,11 +98,11 @@ namespace SGIPv2.Pages
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
-                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
-                cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
-                cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
-                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
+                cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = clave;
+                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = nombre;
+                cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = appat;
+                cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = apmat;
+                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = licenciatura;
 
                 try
                 {
@@ -129,7 +129,7 @@ namespace SGIPv2.Pages
             string nombre = tbnombre.Text;
             string appat = tbappat.Text;
             string apmat = tbapmat.Text;
-            string licenciatura = tblicenciatura.Text;
+            string licenciatura = ddlLicenciatura.Text;
 
             if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(appat) || string.IsNullOrWhiteSpace(apmat) || string.IsNullOrWhiteSpace(licenciatura))
             {
@@ -145,7 +145,7 @@ namespace SGIPv2.Pages
                 cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
                 cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
                 cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
-                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = tblicenciatura.Text;
+                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = ddlLicenciatura.Text;
 
                 int rowsAffected = cmd.ExecuteNonQuery();
                 con.Close();
@@ -191,7 +191,7 @@ namespace SGIPv2.Pages
             tbnombre.Text = "";
             tbappat.Text = "";
             tbapmat.Text = "";
-            tblicenciatura.Text = "";
+            ddlLicenciatura.Text = "";
         }
     }
 }
