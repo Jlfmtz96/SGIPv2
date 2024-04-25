@@ -84,6 +84,8 @@
     <Content Include="Main\Main.aspx" />
     <Content Include="Proyectos\CRUD.aspx" />
     <Content Include="Proyectos\Index.aspx" />
+    <Content Include="Publicaciones\CRUD.aspx" />
+    <Content Include="Publicaciones\Index.aspx" />
     <Content Include="Revistas\CRUD.aspx" />
     <Content Include="Revistas\Index.aspx" />
     <Content Include="Web.config" />
@@ -151,6 +153,20 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Proyectos\Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publicaciones\CRUD.aspx.cs">
+      <DependentUpon>CRUD.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publicaciones\CRUD.aspx.designer.cs">
+      <DependentUpon>CRUD.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publicaciones\Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publicaciones\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Revistas\CRUD.aspx.cs">

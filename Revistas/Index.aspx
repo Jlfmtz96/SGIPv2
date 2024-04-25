@@ -9,7 +9,7 @@
         <br />
         <div class="container mx-auto">
             <div class="flex justify-center">
-                <h2 class="font-bold">Listado de registros</h2>
+                <h2 class="font-bold">Listado de Revistas</h2>
             </div>
         </div>
         <br />
