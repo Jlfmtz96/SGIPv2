@@ -249,7 +249,7 @@ namespace SGIPv2.Revistas
                     Response.Clear();
                     Response.Buffer = true;
                     Response.ContentType = "application/vnd.ms-excel";
-                    Response.AddHeader("content-disposition", "attachment;filename=Alumnos.xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=Revistas.xls");
                     Response.Charset = "";
                     Response.Output.Write(sw.ToString());
                     Response.End();

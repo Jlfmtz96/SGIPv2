@@ -58,17 +58,22 @@
 
                 <div class="col-span-full">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Fecha de publicación</label>
-                    <div class="mt-2">
+                    <div class="mt-2 relative">
                         <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbfpub" style="width: 350px;"></asp:TextBox>
                         <ajaxToolkit:CalendarExtender ID="calExtPub" runat="server" TargetControlID="tbfpub" PopupButtonID="btnCalPub" />
-                        <asp:ImageButton runat="server" ID="btnCalPub" CssClass="fa fa-calendar" />
+                        <button id="btnCalPub" class="absolute right-0 top-0 bottom-0 h-full w-8 px-1 flex items-center justify-center" style="border: none; background: none;" runat="server">
+                            <i class="fas fa-calendar"></i>
+                        </button>
                     </div>
                 </div>
 
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Tipo</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtipo" style="width: 350px;"></asp:TextBox>
+                    <asp:DropDownList runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="ddlTipo" style="width: 350px;">
+                        <asp:ListItem Text="Artículo" Value="Artículo" />
+                        <asp:ListItem Text="Memoria" Value="Memoria" />
+                    </asp:DropDownList>
                   </div>
                 </div>
 

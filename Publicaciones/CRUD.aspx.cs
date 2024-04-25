@@ -67,7 +67,7 @@ namespace SGIPv2.Publicaciones
             tbclave.Text = row["id_producto"].ToString();
             tbtitulo.Text = row["titulo_producto"].ToString();
             tbfpub.Text = row["fecha_publicacion"].ToString();
-            tbtipo.Text = row["tipo_pi"].ToString();
+            ddlTipo.Text = row["tipo_pi"].ToString();
             tblugar.Text = row["lugar_publicacion"].ToString();
             con.Close();
         }
@@ -77,7 +77,7 @@ namespace SGIPv2.Publicaciones
             string clave = tbclave.Text;
             string titulo = tbtitulo.Text;
             string fechaPub = tbfpub.Text;
-            string tipo = tbtipo.Text;
+            string tipo = ddlTipo.Text;
             string lugar = tblugar.Text;
 
             if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fechaPub) || string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
@@ -94,13 +94,7 @@ namespace SGIPv2.Publicaciones
                 return;
             }
 
-            DateTime fechaPublicacion;
-            if (!DateTime.TryParseExact(fechaPub, "M/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaPublicacion))
-            {
-                lblErrorMessage.Text = "La fecha de publicación '" + fechaPub + "' no tiene un formato válido.";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
-                return;
-            }
+
 
             string query = "INSERT INTO Producto_investigacion (ID_producto, titulo_producto, fecha_publicacion, tipo_pi, lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
 
@@ -108,8 +102,8 @@ namespace SGIPv2.Publicaciones
             {
                 cmd.Parameters.Add("@ID_producto", SqlDbType.VarChar).Value = tbclave.Text;
                 cmd.Parameters.Add("@titulo_producto", SqlDbType.VarChar).Value = tbtitulo.Text;
-                cmd.Parameters.Add("@fecha_publicacion", SqlDbType.Date).Value = fechaPublicacion;
-                cmd.Parameters.Add("@tipo_pi", SqlDbType.VarChar).Value = tbtipo.Text;
+                cmd.Parameters.Add("@fecha_publicacion", SqlDbType.Date).Value = tbfpub.Text;
+                cmd.Parameters.Add("@tipo_pi", SqlDbType.VarChar).Value = ddlTipo.Text;
                 cmd.Parameters.Add("@lugar_publicacion", SqlDbType.VarChar).Value = tblugar.Text;
 
                 try
@@ -136,7 +130,7 @@ namespace SGIPv2.Publicaciones
             string clave = tbclave.Text;
             string titulo = tbtitulo.Text;
             string fecha = tbfpub.Text;
-            string tipo = tbtipo.Text;
+            string tipo = ddlTipo.Text;
             string lugar = tblugar.Text;
 
             if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fecha) || string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
@@ -151,7 +145,7 @@ namespace SGIPv2.Publicaciones
                 con.Open();
                 cmd.Parameters.Add("@Clave", SqlDbType.VarChar).Value = clave;
                 cmd.Parameters.Add("@Titulo", SqlDbType.VarChar).Value = titulo;
-                cmd.Parameters.Add("@Fecha", SqlDbType.VarChar).Value = fecha;
+                cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha;
                 cmd.Parameters.Add("@Tipo", SqlDbType.VarChar).Value = tipo;
                 cmd.Parameters.Add("@Lugar", SqlDbType.VarChar).Value = lugar;
 
@@ -198,7 +192,7 @@ namespace SGIPv2.Publicaciones
             tbclave.Text = "";
             tbtitulo.Text = "";
             tbfpub.Text = "";
-            tbtipo.Text = "";
+            ddlTipo.Text = "";
             tblugar.Text = "";
         }
     }
