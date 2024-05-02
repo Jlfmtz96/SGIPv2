@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -36,6 +37,7 @@ namespace SGIPv2
                     // If not logged in, set the text of the label to "Iniciar Sesión"
                     lblUsername.Text = "Iniciar Sesión";
                     navbarsesion.Visible = false; // Hide the logout button
+                    mobilemenu.Visible = false;
                 }
             }
 
@@ -64,9 +66,11 @@ namespace SGIPv2
             {
                 case "alumnos":
                     AlumnosLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
+                    AlumnosLinkM.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     break;
                 case "investigadores":
                     InvestigadoresLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
+                    InvestigadoresLinkM.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     break;
                 case "proyectos":
                     ProyectosLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";

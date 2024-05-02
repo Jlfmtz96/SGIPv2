@@ -84,16 +84,16 @@ namespace SGIPv2.Publicaciones
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnCalPub;
+        protected global::System.Web.UI.WebControls.ImageButton btnCalPub;
 
         /// <summary>
-        /// Control ddlTipo.
+        /// Control tbtipo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTipo;
+        protected global::System.Web.UI.WebControls.TextBox tbtipo;
 
         /// <summary>
         /// Control tblugar.

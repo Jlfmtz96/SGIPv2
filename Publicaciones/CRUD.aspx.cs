@@ -67,7 +67,7 @@ namespace SGIPv2.Publicaciones
             tbclave.Text = row["id_producto"].ToString();
             tbtitulo.Text = row["titulo_producto"].ToString();
             tbfpub.Text = row["fecha_publicacion"].ToString();
-            tbtipo.Text = row["tipo_pi"].ToString();
+            tbtipo.Text = row["tipo_PI"].ToString();
             tblugar.Text = row["lugar_publicacion"].ToString();
             con.Close();
         }
