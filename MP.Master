@@ -32,6 +32,23 @@
             text-decoration: none; /* Quitar subrayado del enlace */
         }
 
+        .nav-linkM {
+            display: block;
+            color: #000; /* Color del texto del enlace */
+            padding: 8px 12px; 
+            text-decoration: none; /* Quitar subrayado del enlace */
+        }
+
+        .nav-linkM:hover {
+            background-color: #00b2e3;
+            color: white;
+        }
+
+        .active-linkM {
+            background-color: #004a98;
+            color: white;
+        }
+
         .active-link {
             background-color: #004a98; /* Color de fondo activo */
             color: white; /* Color del texto activo */
@@ -121,13 +138,13 @@
             </div>
 
             <!-- Mobile menu, show/hide based on menu state. -->
-            <div id="mobilemenu" class="sm:hidden hidden" runat="server">
+            <div id="mobilemenu" class="bg-slate-100 sm:hidden hidden" runat="server">
                 <div class="space-y-1 px-2 pb-3 pt-2">
-                      <asp:HyperLink runat="server" ID="AlumnosLinkM" CssClass="nav-link bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
-                      <asp:HyperLink runat="server" ID="InvestigadoresLinkM" CssClass="nav-link bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
-                    <a href="Proyectos/Index.aspx" runat="server" class="nav-link text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Proyectos</a>
-                    <a href="Publicaciones/Index.aspx"  runat="server" class="nav-link text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Publicaciones</a>
-                    <a href="Revistas/Index.aspx" runat="server" class="nav-link text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Revistas</a>
+                    <asp:HyperLink runat="server" ID="AlumnosLinkM" CssClass="nav-linkM" aria-current="page" NavigateUrl="~/Alumnos/Index.aspx" Text="Alumnos" />
+                    <asp:HyperLink runat="server" ID="InvestigadoresLinkM" CssClass="nav-linkM" aria-current="page" NavigateUrl="~/Investigadores/Index.aspx" Text="Investigadores" />
+                    <asp:HyperLink runat="server" ID="ProyectosLinkM" CssClass="nav-linkM" aria-current="page" NavigateUrl="~/Proyectos/Index.aspx" Text="Proyectos" />
+                    <asp:HyperLink runat="server" ID="PublicacionesLinkM" CssClass="nav-linkM" aria-current="page" NavigateUrl="~/Publicaciones/Index.aspx" Text="Publicaciones" />
+                    <asp:HyperLink runat="server" ID="RevistasLinkM" CssClass="nav-linkM" aria-current="page" NavigateUrl="~/Revistas/Index.aspx" Text="Revistas" />
                 </div>
             </div>
         </nav>

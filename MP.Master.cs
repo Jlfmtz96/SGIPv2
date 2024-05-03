@@ -57,11 +57,11 @@ namespace SGIPv2
             {
                 activeSection = "proyectos";
             }
-            else if (currentPage.Contains("/publicaciones"))
+            else if (currentPage.Contains("/publicaciones/"))
             {
                 activeSection = "publicaciones";
             }
-            else if (currentPage.Contains("/revistas"))
+            else if (currentPage.Contains("/revistas/"))
             {
                 activeSection = "revistas";
             }
@@ -72,28 +72,44 @@ namespace SGIPv2
             PublicacionesLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
             RevistasLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
 
+            AlumnosLinkM.CssClass = "nav-linkM hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+            InvestigadoresLinkM.CssClass = "nav-linkM hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+            ProyectosLinkM.CssClass = "nav-linkM hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+            PublicacionesLinkM.CssClass = "nav-linkM hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+            RevistasLinkM.CssClass = "nav-linkM hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+
             // Establecer los estilos de los enlaces según la sección activa
             switch (activeSection)
             {
                 case "alumnos":
                     AlumnosLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     AlumnosLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+
+                    AlumnosLinkM.CssClass = "nav-linkM active-linkM rounded-md";
                     break;
                 case "investigadores":
                     InvestigadoresLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     InvestigadoresLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+
+                    InvestigadoresLinkM.CssClass = "nav-linkM active-linkM rounded-md";
                     break;
                 case "proyectos":
                     ProyectosLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     ProyectosLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+
+                    ProyectosLinkM.CssClass = "nav-linkM active-linkM rounded-md";
                     break;
                 case "publicaciones":
                     PublicacionesLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     PublicacionesLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+
+                    PublicacionesLinkM.CssClass = "nav-linkM active-linkM rounded-md";
                     break;
                 case "revistas":
                     RevistasLink.CssClass = "bg-[#004a98] text-white rounded-md px-3 py-2 text-sm font-medium";
                     RevistasLink.CssClass = "hover:bg-[#00b2e3] hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+
+                    RevistasLinkM.CssClass = "nav-linkM active-linkM rounded-md";
                     break;
                 default:
                     break;
