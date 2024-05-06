@@ -16,6 +16,29 @@
               <br />
   <div class="container mx-auto">
       <div class="flex justify-end">
+
+                <div class="dropdown text-sm font-medium" style="position: relative; margin-right: auto; background-color:rgb(0 74 152); border-radius:10px; padding:10px; color:white">
+                    <button class="btn dropdown-toggle" type="button" id="btnDropdown" aria-haspopup="true" aria-expanded="false">
+                        Seleccionar Columnas
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnDropdown" style="position: absolute; top: 100%; left: 0; background-color: rgb(0 74 152); border-radius:10px;">
+                        <div class="dropdown-item" style=" padding: 8px;">
+                            <asp:CheckBox ID="chkColumn1" runat="server" Text="Id" Checked="true" />
+                        </div>
+                        <div class="dropdown-item" style=" padding: 8px;">
+                            <asp:CheckBox ID="chkColumn2" runat="server" Text="Título" Checked="true" />
+                        </div>
+                        <div class="dropdown-item" style=" padding: 8px;">
+                            <asp:CheckBox ID="chkColumn3" runat="server" Text="Fecha de publicación" Checked="true" />
+                        </div>
+                         <div class="dropdown-item" style=" padding: 8px;">
+                             <asp:CheckBox ID="CheckBox1" runat="server" Text="Tipo" Checked="true" />
+                         </div>
+                         <div class="dropdown-item" style=" padding: 8px;">
+                             <asp:CheckBox ID="CheckBox2" runat="server" Text="Lugar" Checked="true" />
+                         </div>
+                    </div>
+                </div>
                         
 
            <div>
@@ -54,6 +77,38 @@
             </div>
         </div>
 </div>
+
+                         <script>
+     $(document).ready(function () {
+         // Initially hide the dropdown items
+         $(".dropdown-item").hide();
+
+         // Toggle dropdown items on button click
+         $("#btnDropdown").click(function () {
+             $(".dropdown-item").toggle();
+         });
+
+         // Function to hide/show columns based on checkbox state
+         $("input[type='checkbox']").change(function () {
+             // Get the checkbox that triggered the change event
+             var chkBox = $(this);
+
+             // Get the column number
+             var columnIndex = chkBox.parent().index() +2; // Index of the parent div + 1
+
+             // Hide or show the entire column based on the checkbox state
+             if (chkBox.prop("checked")) {
+                 $('table tr th:nth-child(' + columnIndex + ')').show();
+                 $('table tr td:nth-child(' + columnIndex + ')').show();
+             } else {
+                 $('table tr th:nth-child(' + columnIndex + ')').hide();
+                 $('table tr td:nth-child(' + columnIndex + ')').hide();
+             }
+         });
+
+
+     });
+                         </script>
 
 
     </form>
