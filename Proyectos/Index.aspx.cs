@@ -28,7 +28,7 @@ namespace SGIPv2.Proyectos
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Proyecto", con);
+            SqlCommand cmd = new SqlCommand("SELECT cve_proyecto, titulo_proyecto, nivel, grado_posgrado, fecha_inicio, fecha_fin FROM Proyecto", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -38,17 +38,10 @@ namespace SGIPv2.Proyectos
 
             dt.Columns["cve_proyecto"].ColumnName = "Clave";
             dt.Columns["titulo_proyecto"].ColumnName = "Titulo";
-            dt.Columns["protocolo"].ColumnName = "Protocolo";
-            dt.Columns["alcance"].ColumnName = "Alcance";
-            dt.Columns["area"].ColumnName = "Area";
+            dt.Columns["nivel"].ColumnName = "Nivel del posgrado";
+            dt.Columns["grado_posgrado"].ColumnName = "Grado del posgrado";
             dt.Columns["fecha_inicio"].ColumnName = "Fecha Inicio";
             dt.Columns["fecha_fin"].ColumnName = "Fecha Fin";
-            dt.Columns["reg_etica"].ColumnName = "Registro Ética";
-            dt.Columns["lugar_registro"].ColumnName = "Lugar de Registro";
-            dt.Columns["CA"].ColumnName = "Cuerpo Académico";
-            dt.Columns["financiamiento"].ColumnName = "Financiamiento";
-            dt.Columns["grado_posgrado"].ColumnName = "Grado del posgrado";
-            dt.Columns["comentarios"].ColumnName = "Comentarios";
 
             dt.Columns["Clave"].SetOrdinal(0);
             dt.Columns["Titulo"].SetOrdinal(1);
