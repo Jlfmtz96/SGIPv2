@@ -31,7 +31,7 @@ namespace SGIPv2.Investigadores
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Investigador", con);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Investigador WHERE registro_activo = 1", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -40,21 +40,42 @@ namespace SGIPv2.Investigadores
             dt.Columns.Add("NombreCompleto", typeof(string));
             foreach (DataRow row in dt.Rows)
             {
-                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + 
+                    row["ap_mat"].ToString();
                 row["NombreCompleto"] = nombreCompleto;
+            }
+
+            dt.Columns.Add("SNI_Vigencia", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string sni_vigencia = row["SNI"].ToString() + " / " + row["sni_vigencia"].ToString();
+                row["SNI_Vigencia"] = sni_vigencia;
+            }
+
+            dt.Columns.Add("PRODEP_Vigencia", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string prodep_vigencia = row["perfil_prodep"].ToString() + " / " + row["prodep_vigencia"].ToString();
+                row["PRODEP_Vigencia"] = prodep_vigencia;
             }
 
             dt.Columns.Remove("nombre_investigador");
             dt.Columns.Remove("ap_pat");
             dt.Columns.Remove("ap_mat");
-
+            dt.Columns.Remove("SNI");
+            dt.Columns.Remove("sni_vigencia");
+            dt.Columns.Remove("perfil_prodep");
+            dt.Columns.Remove("prodep_vigencia");
+            dt.Columns.Remove("registro_activo");
 
             dt.Columns["cve_inv"].ColumnName = "Clave UASLP";
             dt.Columns["NombreCompleto"].ColumnName = "Nombre";
-            dt.Columns["Correo"].ColumnName = "correo";
+            dt.Columns["Correo"].ColumnName = "Correo";
             dt.Columns["cuerpo_academico"].ColumnName = "Cuerpo Academico";
-            dt.Columns["SNI"].ColumnName = "SNI";
+            dt.Columns["lider_CA"].ColumnName = "Líder del CA";
+            dt.Columns["SNI_Vigencia"].ColumnName = "SNI / Vigencia";
             dt.Columns["activo"].ColumnName = "Activo";
+            dt.Columns["PRODEP_Vigencia"].ColumnName = "PRODEP / Vigencia";
 
             dt.Columns["Clave UASLP"].SetOrdinal(0);
             dt.Columns["Nombre"].SetOrdinal(1);
@@ -63,6 +84,15 @@ namespace SGIPv2.Investigadores
             gvinv.DataSource = dt;
             gvinv.DataBind();
             con.Close();
+        }
+
+        protected void PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            // Establecer el índice de la página seleccionada
+            gvinv.PageIndex = e.NewPageIndex;
+
+            // Volver a cargar los datos en la GridView
+            CargarTabla();
         }
 
         protected void BtnRead_Click(object sender, EventArgs e)
@@ -78,12 +108,17 @@ namespace SGIPv2.Investigadores
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT cve_inv, nombre_investigador, ap_pat, ap_mat, correo, cuerpo_academico, SNI, activo FROM Investigador WHERE cve_inv LIKE @busqueda OR nombre_investigador LIKE @busqueda OR ap_pat LIKE @busqueda OR ap_mat LIKE @busqueda OR correo LIKE @busqueda or SNI LIKE @busqueda or activo LIKE @busqueda";
-
-
+            string consulta = "SELECT * FROM Investigador " +
+                "WHERE (cve_inv LIKE @busqueda OR nombre_investigador LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI OR ap_pat LIKE " +
+                "@busqueda COLLATE SQL_Latin1_General_CP1_CI_AI OR ap_mat LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI " +
+                "OR correo LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI OR cuerpo_academico LIKE @busqueda " +
+                "COLLATE SQL_Latin1_General_CP1_CI_AI OR SNI LIKE @busqueda OR sni_vigencia LIKE @busqueda OR perfil_prodep LIKE " +
+                "@busqueda OR prodep_vigencia LIKE @busqueda) AND (@activo = -1 OR activo = @activo) AND registro_activo = 1";
 
             SqlCommand cmd = new SqlCommand(consulta, con);
             cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
+
+            cmd.Parameters.AddWithValue("@activo", ddlActivo.SelectedValue); // Valor seleccionado en el DropDownList
 
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -93,30 +128,62 @@ namespace SGIPv2.Investigadores
             dt.Columns.Add("NombreCompleto", typeof(string));
             foreach (DataRow row in dt.Rows)
             {
-                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + row["ap_mat"].ToString();
+                string nombreCompleto = row["nombre_investigador"].ToString() + " " + row["ap_pat"].ToString() + " " + 
+                    row["ap_mat"].ToString();
                 row["NombreCompleto"] = nombreCompleto;
+            }
+
+            dt.Columns.Add("SNI_Vigencia", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string sni_vigencia = row["SNI"].ToString() + " / " + row["sni_vigencia"].ToString();
+                row["SNI_Vigencia"] = sni_vigencia;
+            }
+
+            dt.Columns.Add("PRODEP_Vigencia", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string prodep_vigencia = row["perfil_prodep"].ToString() + " / " + row["prodep_vigencia"].ToString();
+                row["PRODEP_Vigencia"] = prodep_vigencia;
             }
 
             dt.Columns.Remove("nombre_investigador");
             dt.Columns.Remove("ap_pat");
             dt.Columns.Remove("ap_mat");
+            dt.Columns.Remove("SNI");
+            dt.Columns.Remove("sni_vigencia");
+            dt.Columns.Remove("perfil_prodep");
+            dt.Columns.Remove("prodep_vigencia");
+            dt.Columns.Remove("registro_activo");
 
             dt.Columns["cve_inv"].ColumnName = "Clave UASLP";
             dt.Columns["NombreCompleto"].ColumnName = "Nombre";
             dt.Columns["Correo"].ColumnName = "Correo";
             dt.Columns["cuerpo_academico"].ColumnName = "Cuerpo Academico";
-            dt.Columns["SNI"].ColumnName = "SNI";
+            dt.Columns["lider_CA"].ColumnName = "Líder del CA";
+            dt.Columns["SNI_Vigencia"].ColumnName = "SNI / Vigencia";
             dt.Columns["activo"].ColumnName = "Activo";
+            dt.Columns["PRODEP_Vigencia"].ColumnName = "PRODEP / Vigencia";
 
             dt.Columns["Clave UASLP"].SetOrdinal(0);
             dt.Columns["Nombre"].SetOrdinal(1);
 
-            //lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
-
-
             gvinv.DataSource = dt;
-            gvinv.DataBind();
+            //gvinv.DataBind();
             con.Close();
+
+            if (dt.Rows.Count == 0) // Verificar si no hay resultados
+            {
+                lblMensaje.Text = "No existen coincidencias con tu búsqueda";
+                gvinv.DataSource = null; // Limpiar los datos en caso de haber algún resultado previo
+            }
+            else
+            {
+                lblMensaje.Text = ""; // Limpiar el mensaje en caso de haber resultados anteriores
+                gvinv.DataSource = dt;
+            }
+
+            gvinv.DataBind();
         }
 
 
@@ -135,7 +202,21 @@ namespace SGIPv2.Investigadores
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Investigadores/CRUD.aspx?id=" + id + "&op=D");
+
+            // Actualizar el campo "activo" a 0 en lugar de eliminar físicamente el registro
+            using (con)
+            {
+                string query = "UPDATE Investigador SET registro_activo = 0 WHERE cve_inv = @id";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                // Redirigir a la página principal u otra página después de "eliminar" el registro
+                Response.Redirect("~/Investigadores/Index.aspx");
+            }
         }
 
         protected void BtnCreate_Click(object sender, EventArgs e)
