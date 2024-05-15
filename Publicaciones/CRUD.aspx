@@ -5,15 +5,32 @@
     Publicaciones
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-        <script>
-    function showErrorDiv() {
-        $('#errorDiv').removeClass('hidden');
-    }
+    <script>
+        function showErrorDiv() {
+            $('#errorDiv').removeClass('hidden');
+        }
 
-    function showSuccessDiv() {
-        $('#successDiv').removeClass('hidden');
-    }
-        </script>
+        function showSuccessDiv() {
+            $('#successDiv').removeClass('hidden');
+        }
+
+        function soloNumeros(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+        function soloLetras(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode === 193 || charCode === 201 || charCode === 205 || charCode === 211 || charCode === 218 || charCode === 225 || charCode === 233 || charCode === 237 || charCode === 243 || charCode === 250 || charCode === 209 || charCode === 241 || charCode === 32 || charCode === 8) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="body" runat="server">
         <br />
@@ -45,21 +62,21 @@
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Id del Producto*</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" Enabled="false" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbclave" style="width: 350px;"></asp:TextBox>
+                    <asp:TextBox runat="server" Enabled="false" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbclave" style="width: 350px;" onkeypress="return soloNumeros(event);" placeholder="Clave" MaxLength="20"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Titulo*</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtitulo" style="width: 350px;"></asp:TextBox>
+                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtitulo" style="width: 350px;" onkeypress="return soloLetras(event);" placeholder="Título" MaxLength="100"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Fecha de publicación*</label>
                     <div class="mt-2">
-                        <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbfpub" style="width: 350px;"></asp:TextBox>
+                        <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbfpub" style="width: 350px;" placeholder="Fecha"></asp:TextBox>
                         <ajaxToolkit:CalendarExtender ID="calExtPub" runat="server" TargetControlID="tbfpub" PopupButtonID="btnCalPub" />
                         <asp:ImageButton runat="server" ID="btnCalPub" CssClass="fa fa-calendar" />
                     </div>
@@ -68,14 +85,14 @@
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Tipo*</label>
                   <div class="mt-2">
-                      <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtipo" style="width: 350px;"></asp:TextBox>
+                      <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbtipo" style="width: 350px;" onkeypress="return soloLetras(event);" placeholder="Tipo" MaxLength="50"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Lugar*</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tblugar" style="width: 350px;"></asp:TextBox>
+                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tblugar" style="width: 350px;" onkeypress="return soloLetras(event);" placeholder="Lugar" MaxLength="20"></asp:TextBox>
                   </div>
                 </div>
             </div>   

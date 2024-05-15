@@ -24,31 +24,51 @@ namespace SGIPv2.Publicaciones
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Producto_investigacion", con);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Producto_investigacion WHERE activo = 1", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-            dt.Columns["ID_producto"].ColumnName = "Id";
+            dt.Columns.Remove("activo");
+
             dt.Columns["titulo_producto"].ColumnName = "Título";
             dt.Columns["fecha_publicacion"].ColumnName = "Fecha de publicación";
             dt.Columns["tipo_pi"].ColumnName = "Tipo";
             dt.Columns["lugar_publicacion"].ColumnName = "Lugar";
 
-            dt.Columns["Id"].SetOrdinal(0);
-            dt.Columns["Título"].SetOrdinal(1);
-
             gvpublicaciones.DataSource = dt;
             gvpublicaciones.DataBind();
+
             con.Close();
+        }
+
+        protected void RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Esconder la celda de la columna ID_producto
+                e.Row.Cells[1].Visible = false;
+            }
+        }
+
+        protected void PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            // Establecer el índice de la página seleccionada
+            gvpublicaciones.PageIndex = e.NewPageIndex;
+
+            // Volver a cargar los datos en la GridView
+            CargarTabla();
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT * FROM Producto_investigacion WHERE ID_producto LIKE @busqueda OR titulo_producto LIKE @busqueda OR fecha_publicacion LIKE @busqueda OR tipo_pi LIKE @busqueda OR lugar_publicacion LIKE @busqueda";
+            string consulta = "SELECT * FROM Producto_investigacion WHERE (titulo_producto LIKE @busqueda " +
+                "COLLATE SQL_Latin1_General_CP1_CI_AI OR fecha_publicacion LIKE @busqueda OR tipo_pi LIKE @busqueda " +
+                "COLLATE SQL_Latin1_General_CP1_CI_AI OR lugar_publicacion LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI) " +
+                "AND activo = 1";
 
             SqlCommand cmd = new SqlCommand(consulta, con);
             cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
@@ -58,18 +78,28 @@ namespace SGIPv2.Publicaciones
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-            dt.Columns["ID_producto"].ColumnName = "Id";
+            dt.Columns.Remove("activo");
+
             dt.Columns["titulo_producto"].ColumnName = "Título";
             dt.Columns["fecha_publicacion"].ColumnName = "Fecha de publicación";
             dt.Columns["tipo_pi"].ColumnName = "Tipo";
             dt.Columns["lugar_publicacion"].ColumnName = "Lugar";
 
-            dt.Columns["Id"].SetOrdinal(0);
-            dt.Columns["Título"].SetOrdinal(1);
-
             gvpublicaciones.DataSource = dt;
-            gvpublicaciones.DataBind();
             con.Close();
+
+            if (dt.Rows.Count == 0) // Verificar si no hay resultados
+            {
+                lblMensaje.Text = "No existen coincidencias con tu búsqueda";
+                gvpublicaciones.DataSource = null; // Limpiar los datos en caso de haber algún resultado previo
+            }
+            else
+            {
+                lblMensaje.Text = ""; // Limpiar el mensaje en caso de haber resultados anteriores
+                gvpublicaciones.DataSource = dt;
+            }
+
+            gvpublicaciones.DataBind();
         }
 
 
@@ -80,21 +110,40 @@ namespace SGIPv2.Publicaciones
 
         protected void BtnDelete_Click(object sender, EventArgs e)
         {
+            Button BtnConsultar = (Button)sender;
+            GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
+            string id = gvpublicaciones.DataKeys[selectedrow.RowIndex].Value.ToString();
 
+            // Actualizar el campo "activo" a 0 en lugar de eliminar físicamente el registro
+            using (con)
+            {
+                string query = "UPDATE Producto_Investigacion SET activo = 0 WHERE ID_producto = @id";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                // Redirigir a la página principal u otra página después de "eliminar" el registro
+                Response.Redirect("~/Publicaciones/Index.aspx");
+            }
         }
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
-            string id;
             Button BtnConsultar = (Button)sender;
-            GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
-            id = selectedrow.Cells[1].Text;
+            GridViewRow selectedRow = (GridViewRow)BtnConsultar.NamingContainer;
+            string id = gvpublicaciones.DataKeys[selectedRow.RowIndex].Value.ToString();
             Response.Redirect("~/Publicaciones/CRUD.aspx?id=" + id + "&op=U");
         }
 
         protected void BtnRead_Click(object sender, EventArgs e)
         {
-
+            Button BtnConsultar = (Button)sender;
+            GridViewRow selectedRow = (GridViewRow)BtnConsultar.NamingContainer;
+            string id = gvpublicaciones.DataKeys[selectedRow.RowIndex].Value.ToString();
+            Response.Redirect("~/Publicaciones/CRUD.aspx?id=" + id + "&op=R");
         }
 
         protected void btnGenerarPDF_Click(object sender, EventArgs e)

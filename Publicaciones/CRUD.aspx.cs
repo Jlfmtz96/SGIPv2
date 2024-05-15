@@ -40,6 +40,7 @@ namespace SGIPv2.Publicaciones
                             break;
                         case "R":
                             this.lbltitulo.Text = "Consulta producto de investigación";
+                            DeshabilitarCampos();
                             break;
                         case "U":
                             this.lbltitulo.Text = "Modificar producto de investigación";
@@ -52,6 +53,16 @@ namespace SGIPv2.Publicaciones
                     }
                 }
             }
+        }
+
+        private void DeshabilitarCampos()
+        {
+            // Desactivar la edición de los campos
+            tbclave.Enabled = false;
+            tbtitulo.Enabled = false;
+            tbfpub.Enabled = false;
+            tbtipo.Enabled = false;
+            tblugar.Enabled = false;
         }
 
         void CargarDatos()
@@ -80,7 +91,8 @@ namespace SGIPv2.Publicaciones
             string tipo = tbtipo.Text;
             string lugar = tblugar.Text;
 
-            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fechaPub) || string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
+            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fechaPub) ||
+                string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
             {
                 lblErrorMessage.Text = "Todos los campos son obligatorios.";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
@@ -102,15 +114,16 @@ namespace SGIPv2.Publicaciones
                 return;
             }
 
-            string query = "INSERT INTO Producto_investigacion (ID_producto, titulo_producto, fecha_publicacion, tipo_PI, lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
+            string query = "INSERT INTO Producto_investigacion (ID_producto, titulo_producto, fecha_publicacion, tipo_PI, " +
+                "lugar_publicacion) VALUES (@ID_producto, @titulo_producto, @fecha_publicacion, @tipo_pi, @lugar_publicacion)";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.Add("@ID_producto", SqlDbType.VarChar).Value = tbclave.Text;
-                cmd.Parameters.Add("@titulo_producto", SqlDbType.VarChar).Value = tbtitulo.Text;
-                cmd.Parameters.Add("@fecha_publicacion", SqlDbType.Date).Value = fechaPublicacion;
-                cmd.Parameters.Add("@tipo_pi", SqlDbType.VarChar).Value = tbtipo.Text;
-                cmd.Parameters.Add("@lugar_publicacion", SqlDbType.VarChar).Value = tblugar.Text;
+                cmd.Parameters.AddWithValue("@ID_producto", clave);
+                cmd.Parameters.AddWithValue("@titulo_producto", titulo);
+                cmd.Parameters.AddWithValue("@fecha_publicacion", fechaPub);
+                cmd.Parameters.AddWithValue("@tipo_pi", tipo);
+                cmd.Parameters.AddWithValue("@lugar_publicacion", lugar);
 
                 try
                 {
@@ -121,6 +134,8 @@ namespace SGIPv2.Publicaciones
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
                     LimpiarCampos();
                     //Response.Redirect("Index.aspx");
+                    ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { " +
+                        "window.location.href = 'Index.aspx'; }, 2000);", true);
                 }
                 catch (Exception ex)
                 {
@@ -129,6 +144,8 @@ namespace SGIPv2.Publicaciones
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
                 }
             }
+
+            con.Close();
         }
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
@@ -139,7 +156,8 @@ namespace SGIPv2.Publicaciones
             string tipo = tbtipo.Text;
             string lugar = tblugar.Text;
 
-            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fecha) || string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
+            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(fecha) ||
+                string.IsNullOrWhiteSpace(tipo) || string.IsNullOrWhiteSpace(lugar))
             {
                 lblErrorMessage.Text = "Todos los campos son obligatorios.";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
@@ -147,13 +165,16 @@ namespace SGIPv2.Publicaciones
             }
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Producto_investigacion SET titulo_producto = @Titulo, fecha_publicacion = @Fecha, tipo_PI = @Tipo, lugar_publicacion = @Lugar WHERE ID_producto = @Clave", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Producto_investigacion SET titulo_producto = @titulo_producto, " +
+                    "fecha_publicacion = @fecha_publicacion, tipo_PI = @tipo_pi, lugar_publicacion = @lugar_publicacion " +
+                    "WHERE ID_producto = @ID_producto", con);
                 con.Open();
-                cmd.Parameters.Add("@Clave", SqlDbType.VarChar).Value = clave;
-                cmd.Parameters.Add("@Titulo", SqlDbType.VarChar).Value = titulo;
-                cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = Convert.ToDateTime(fecha).Date;
-                cmd.Parameters.Add("@Tipo", SqlDbType.VarChar).Value = tipo;
-                cmd.Parameters.Add("@Lugar", SqlDbType.VarChar).Value = lugar;
+
+                cmd.Parameters.AddWithValue("@ID_producto", clave);
+                cmd.Parameters.AddWithValue("@titulo_producto", titulo);
+                cmd.Parameters.AddWithValue("@fecha_publicacion", fecha);
+                cmd.Parameters.AddWithValue("@tipo_pi", tipo);
+                cmd.Parameters.AddWithValue("@lugar_publicacion", lugar);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
                 con.Close();
@@ -163,7 +184,8 @@ namespace SGIPv2.Publicaciones
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
                 //System.Threading.Thread.Sleep(3000);
                 //Response.Redirect("Index.aspx");
-                ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { window.location.href = 'Index.aspx'; }, 2000);", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { " +
+                    "window.location.href = 'Index.aspx'; }, 2000);", true);
             }
             catch (Exception ex)
             {
@@ -179,7 +201,7 @@ namespace SGIPv2.Publicaciones
 
         protected void BtnDelete_Click(object sender, EventArgs e)
         {
-
+            //
         }
 
         private bool ClaveExiste(string clave)
