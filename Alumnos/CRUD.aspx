@@ -59,28 +59,28 @@
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Clave del Alumno*</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" Enabled="false" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbclave" style="width: 350px;" onkeypress="return soloNumeros(event);"></asp:TextBox>
+                    <asp:TextBox runat="server" Enabled="false" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbclave" style="width: 350px;" onkeypress="return soloNumeros(event);" placeholder="Clave" MaxLength="20"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Nombre*</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbnombre" style="width: 350px;" onkeypress="return soloLetras(event);"></asp:TextBox>
+                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbnombre" style="width: 350px;" onkeypress="return soloLetras(event);" placeholder="Nombre" MaxLength="40"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Apellido Paterno</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbappat" style="width: 350px;" onkeypress="return soloLetras(event);"></asp:TextBox>
+                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbappat" style="width: 350px;" onkeypress="return soloLetras(event);" placeholder="Apellido Paterno" MaxLength="30"></asp:TextBox>
                   </div>
                 </div>
 
                 <div class="col-span-full">
                   <label class="block text-sm font-medium leading-6 text-gray-900">Apellido Materno</label>
                   <div class="mt-2">
-                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbapmat" style="width: 350px;" onkeypress="return soloLetras(event);"></asp:TextBox>
+                    <asp:TextBox runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="tbapmat" style="width: 350px;" onkeypress="return soloLetras(event);" placeholder="Apellido Materno" MaxLength="30"></asp:TextBox>
                   </div>
                 </div>
 
@@ -89,14 +89,14 @@
                   <div class="mt-2">
                     <asp:DropDownList runat="server" CssClass="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" ID="ddlLicenciatura" style="width: 350px;">
                         <asp:ListItem Text="Seleccionar..." Value=""></asp:ListItem>
-                        <asp:ListItem Text="Licenciatura en Enfermería" Value="Lic. Enfermería"></asp:ListItem>
-                        <asp:ListItem Text="Licenciatura en Nutrición" Value="Lic. Nutrición"></asp:ListItem>
+                        <asp:ListItem Text="Licenciatura en Enfermería" Value="Lic. Enfermería" data-maxlength="50"></asp:ListItem>
+                        <asp:ListItem Text="Licenciatura en Nutrición" Value="Lic. Nutrición" data-maxlength="50"></asp:ListItem>
                     </asp:DropDownList>
                   </div>
                 </div>
 
                 <div class="col-span-full">
-                    <label>*Datos obligatorios</label>
+                    <label ID="lblDatos" runat="server">*Datos obligatorios</label>
                 </div>
 
 
@@ -107,6 +107,20 @@
             <asp:Button runat="server" CssClass="btn btn-primary" ID="BtnDelete" Text="Eliminar" Visible="false" OnClick="BtnDelete_Click"/>
             <asp:Button runat="server" CssClass="hover:cursor-pointer text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 " ID="BtnVolver" Text="Volver" Visible="true" OnClick="BtnVolver_Click" />
         </div>
+
+        <script>
+            // Script para validar la longitud de la opción seleccionada
+            $(document).ready(function () {
+                $('#<%= ddlLicenciatura.ClientID %>').change(function () {
+                    var selectedOption = $(this).find('option:selected');
+                    var maxLength = parseInt(selectedOption.attr('data-maxlength'), 10);
+                    if ($(this).val().length > maxLength) {
+                        alert('La selección supera la longitud máxima permitida.');
+                        $(this).val(''); // Limpiar la selección si excede la longitud máxima
+                    }
+                });
+            });
+        </script>
 
     </form>
 
