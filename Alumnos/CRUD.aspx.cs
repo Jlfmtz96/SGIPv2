@@ -40,6 +40,7 @@ namespace SGIPv2.Pages
                             break;
                         case "R":
                             this.lbltitulo.Text = "Consulta de alumno";
+                            DeshabilitarCampos();
                             break;
                         case "U":
                             this.lbltitulo.Text = "Modificar alumno";
@@ -54,11 +55,22 @@ namespace SGIPv2.Pages
             }
         }
 
+        private void DeshabilitarCampos()
+        {
+            // Desactivar la edición de los campos
+            tbclave.Enabled = false;
+            tbnombre.Enabled = false;
+            tbappat.Enabled = false;
+            tbapmat.Enabled = false;
+            ddlLicenciatura.Enabled = false;
+            lblDatos.Visible = false;
+        }
+
         void CargarDatos()
         {
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Alumno WHERE cve_alumno = @cve_alumno", con);
-            da.SelectCommand.Parameters.Add("@cve_alumno", SqlDbType.VarChar).Value=aCve;
+            da.SelectCommand.Parameters.Add("@cve_alumno", SqlDbType.VarChar).Value = aCve;
             DataSet ds = new DataSet();
             ds.Clear();
             da.Fill(ds);
@@ -69,6 +81,7 @@ namespace SGIPv2.Pages
             tbappat.Text = row["ap_pat_alumno"].ToString();
             tbapmat.Text = row["ap_mat_alumno"].ToString();
             ddlLicenciatura.Text = row["licenciatura"].ToString();
+
             con.Close();
         }
 
@@ -80,29 +93,30 @@ namespace SGIPv2.Pages
             string apmat = tbapmat.Text;
             string licenciatura = ddlLicenciatura.Text;
 
-            if(string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(licenciatura))
+            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(licenciatura))
             {
                 lblErrorMessage.Text = "Complete los campos obligatorios";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
                 return;
             }
 
-            if(ClaveExiste(clave))
+            if (ClaveExiste(clave))
             {
                 lblErrorMessage.Text = "Esta clave ya se encuentra registrada";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
                 return;
             }
 
-            string query = "INSERT INTO Alumno (cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura) VALUES (@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)";
+            string query = "INSERT INTO Alumno (cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura) VALUES " +
+                "(@Cve_alumno, @Nombre, @ApellidoPaterno, @ApellidoMaterno, @Licenciatura)";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = clave;
-                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = nombre;
-                cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = appat;
-                cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = apmat;
-                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = licenciatura;
+                cmd.Parameters.AddWithValue("@Cve_alumno", clave);
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cmd.Parameters.AddWithValue("@ApellidoPaterno", appat);
+                cmd.Parameters.AddWithValue("@ApellidoMaterno", apmat);
+                cmd.Parameters.AddWithValue("@Licenciatura", licenciatura);
 
                 try
                 {
@@ -113,13 +127,17 @@ namespace SGIPv2.Pages
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
                     LimpiarCampos();
                     //Response.Redirect("Index.aspx");
+                    ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { " +
+                        "window.location.href = 'Index.aspx'; }, 2000);", true);
                 }
                 catch (Exception ex)
                 {
                     // Mostrar el modal de error con el mensaje de error
-                    lblErrorMessage.Text = "Error al agregar alumno: " + ex.Message ;
+                    lblErrorMessage.Text = "Error al agregar alumno: " + ex.Message;
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
                 }
+
+                con.Close();
             }
         }
 
@@ -131,21 +149,23 @@ namespace SGIPv2.Pages
             string apmat = tbapmat.Text;
             string licenciatura = ddlLicenciatura.Text;
 
-            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(appat) || string.IsNullOrWhiteSpace(apmat) || string.IsNullOrWhiteSpace(licenciatura))
+            if (string.IsNullOrWhiteSpace(clave) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(licenciatura))
             {
-                lblErrorMessage.Text = "Todos los campos son obligatorios.";
+                lblErrorMessage.Text = "Complete los campos obligatorios";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowErrorDiv", "showErrorDiv();", true);
                 return;
             }
+
             try
             {
-                SqlCommand cmd = new SqlCommand("UPDATE Alumno SET nombre_alumno = @Nombre, ap_pat_alumno = @ApellidoPaterno, ap_mat_alumno = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Alumno SET nombre_alumno = @Nombre, ap_pat_alumno = @ApellidoPaterno, " +
+                    "ap_mat_alumno = @ApellidoMaterno, licenciatura = @Licenciatura WHERE cve_alumno = @Cve_alumno", con);
                 con.Open();
-                cmd.Parameters.Add("@Cve_alumno", SqlDbType.VarChar).Value = tbclave.Text;
-                cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = tbnombre.Text;
-                cmd.Parameters.Add("@ApellidoPaterno", SqlDbType.VarChar).Value = tbappat.Text;
-                cmd.Parameters.Add("@ApellidoMaterno", SqlDbType.VarChar).Value = tbapmat.Text;
-                cmd.Parameters.Add("@Licenciatura", SqlDbType.VarChar).Value = ddlLicenciatura.Text;
+                cmd.Parameters.AddWithValue("@Cve_alumno", clave);
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cmd.Parameters.AddWithValue("@ApellidoPaterno", appat);
+                cmd.Parameters.AddWithValue("@ApellidoMaterno", apmat);
+                cmd.Parameters.AddWithValue("@Licenciatura", licenciatura);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
                 con.Close();
@@ -155,7 +175,8 @@ namespace SGIPv2.Pages
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowSuccessDiv", "showSuccessDiv();", true);
                 //System.Threading.Thread.Sleep(3000);
                 //Response.Redirect("Index.aspx");
-                ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { window.location.href = 'Index.aspx'; }, 2000);", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "RedirectAfterDelay", "setTimeout(function() { " +
+                    "window.location.href = 'Index.aspx'; }, 2000);", true);
             }
             catch (Exception ex)
             {
@@ -166,7 +187,7 @@ namespace SGIPv2.Pages
 
         protected void BtnDelete_Click(object sender, EventArgs e)
         {
-
+            //
         }
 
         protected void BtnVolver_Click(object sender, EventArgs e)

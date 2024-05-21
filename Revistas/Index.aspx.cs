@@ -36,38 +36,35 @@ namespace SGIPv2.Revistas
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT ID_revista, nombre_revista, tipo_revista, pais FROM Revista", con);
+            SqlCommand cmd = new SqlCommand("SELECT ID_revista AS 'Clave ISBN', nombre_revista AS 'Nombre', tipo_revista AS 'Tipo', " +
+                "pais AS 'País', doi AS 'DOI' FROM Revista WHERE activo = 1", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             da.Fill(dt);
-
-            /*dt.Columns.Add("NombreCompleto", typeof(string));
-            foreach (DataRow row in dt.Rows)
-            {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
-                row["NombreCompleto"] = nombreCompleto;
-            }*/
-
-            dt.Columns["ID_revista"].ColumnName = "Clave ISBN";
-            dt.Columns["nombre_revista"].ColumnName = "Nombre";
-            dt.Columns["tipo_revista"].ColumnName = "Tipo";
-            dt.Columns["pais"].ColumnName = "País";
-
-            dt.Columns["Clave ISBN"].SetOrdinal(0);
-            dt.Columns["Nombre"].SetOrdinal(1);
 
             gvrevistas.DataSource = dt;
             gvrevistas.DataBind();
             con.Close();
         }
 
+        protected void PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            // Establecer el índice de la página seleccionada
+            gvrevistas.PageIndex = e.NewPageIndex;
+
+            // Volver a cargar los datos en la GridView
+            CargarTabla();
+        }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT ID_revista, nombre_revista, tipo_revista, pais FROM Revista WHERE ID_revista LIKE @busqueda OR nombre_revista LIKE @busqueda OR tipo_revista LIKE @busqueda OR pais LIKE @busqueda";
+            string consulta = "SELECT ID_revista AS 'Clave ISBN', nombre_revista AS 'Nombre', tipo_revista AS 'Tipo', pais AS 'País', " +
+                "doi AS 'DOI' FROM Revista WHERE (ID_revista LIKE @busqueda OR nombre_revista LIKE @busqueda " +
+                "COLLATE SQL_Latin1_General_CP1_CI_AI OR tipo_revista LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI OR pais LIKE " +
+                "@busqueda COLLATE SQL_Latin1_General_CP1_CI_AI) AND activo = 1";
 
             SqlCommand cmd = new SqlCommand(consulta, con);
             cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
@@ -77,24 +74,21 @@ namespace SGIPv2.Revistas
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-            /*dt.Columns.Add("NombreCompleto", typeof(string));
-            foreach (DataRow row in dt.Rows)
-            {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
-                row["NombreCompleto"] = nombreCompleto;
-            }*/
-
-            dt.Columns["ID_revista"].ColumnName = "Clave ISBN";
-            dt.Columns["nombre_revista"].ColumnName = "Nombre";
-            dt.Columns["tipo_revista"].ColumnName = "Tipo";
-            dt.Columns["pais"].ColumnName = "País";
-
-            dt.Columns["Clave ISBN"].SetOrdinal(0);
-            dt.Columns["Nombre"].SetOrdinal(1);
-
             gvrevistas.DataSource = dt;
-            gvrevistas.DataBind();
             con.Close();
+
+            if (dt.Rows.Count == 0) // Verificar si no hay resultados
+            {
+                lblMensaje.Text = "No existen coincidencias con tu búsqueda";
+                gvrevistas.DataSource = null; // Limpiar los datos en caso de haber algún resultado previo
+            }
+            else
+            {
+                lblMensaje.Text = ""; // Limpiar el mensaje en caso de haber resultados anteriores
+                gvrevistas.DataSource = dt;
+            }
+
+            gvrevistas.DataBind();
         }
 
         protected void BtnCreate_Click(object sender, EventArgs e)
@@ -126,7 +120,21 @@ namespace SGIPv2.Revistas
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Revistas/CRUD.aspx?id=" + id + "&op=D");
+
+            // Actualizar el campo "activo" a 0 en lugar de eliminar físicamente el registro
+            using (con)
+            {
+                string query = "UPDATE Revista SET activo = 0 WHERE ID_revista = @id";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                // Redirigir a la página principal u otra página después de "eliminar" el registro
+                Response.Redirect("~/Revistas/Index.aspx");
+            }
         }
 
         /*protected void btnGenerarPDF_Click(object sender, EventArgs e)

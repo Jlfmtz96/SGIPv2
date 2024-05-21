@@ -35,43 +35,35 @@ namespace SGIPv2.Pages
 
         void CargarTabla()
         {
-            SqlCommand cmd = new SqlCommand("SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno", con);
+            SqlCommand cmd = new SqlCommand("SELECT cve_alumno AS 'Clave UASLP', CONCAT(nombre_alumno, ' ', ap_pat_alumno, ' ', " +
+                "ap_mat_alumno) AS 'Nombre Completo', licenciatura AS 'Licenciatura' FROM Alumno WHERE activo = 1", con);
             con.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             da.Fill(dt);
-
-            dt.Columns.Add("NombreCompleto", typeof(string));
-            foreach (DataRow row in dt.Rows)
-            {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
-                row["NombreCompleto"] = nombreCompleto;
-            }
-
-            dt.Columns.Remove("nombre_alumno");
-            dt.Columns.Remove("ap_pat_alumno");
-            dt.Columns.Remove("ap_mat_alumno");
-
-            dt.Columns["cve_alumno"].ColumnName = "Clave UASLP";
-            dt.Columns["NombreCompleto"].ColumnName = "Nombre";
-            dt.Columns["licenciatura"].ColumnName = "Licenciatura";
-
-            dt.Columns["Clave UASLP"].SetOrdinal(0);
-            dt.Columns["Nombre"].SetOrdinal(1);
-
-            // lblResultsCount.Text = "Mostrando " + dt.Rows.Count + " de " + dt.Rows.Count + " resultados";
 
             gvalumnos.DataSource = dt;
             gvalumnos.DataBind();
             con.Close();
         }
 
+        protected void PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            // Establecer el índice de la página seleccionada
+            gvalumnos.PageIndex = e.NewPageIndex;
+
+            // Volver a cargar los datos en la GridView
+            CargarTabla();
+        }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             string busqueda = txtBusqueda.Text.Trim();
 
-            string consulta = "SELECT cve_alumno, nombre_alumno, ap_pat_alumno, ap_mat_alumno, licenciatura FROM Alumno WHERE cve_alumno LIKE @busqueda OR nombre_alumno LIKE @busqueda OR ap_pat_alumno LIKE @busqueda OR ap_mat_alumno LIKE @busqueda";
+            string consulta = "SELECT cve_alumno AS 'Clave UASLP', CONCAT(nombre_alumno, ' ', ap_pat_alumno, ' ', ap_mat_alumno) AS " +
+                "'Nombre Completo', licenciatura AS 'Licenciatura' FROM Alumno WHERE (cve_alumno LIKE @busqueda OR nombre_alumno LIKE " +
+                "@busqueda COLLATE SQL_Latin1_General_CP1_CI_AI OR ap_pat_alumno LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI OR " +
+                "ap_mat_alumno LIKE @busqueda COLLATE SQL_Latin1_General_CP1_CI_AI) AND (activo = 1)";
 
             SqlCommand cmd = new SqlCommand(consulta, con);
             cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
@@ -81,27 +73,21 @@ namespace SGIPv2.Pages
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-            dt.Columns.Add("NombreCompleto", typeof(string));
-            foreach (DataRow row in dt.Rows)
+            gvalumnos.DataSource = dt;
+            con.Close();
+
+            if (dt.Rows.Count == 0) // Verificar si no hay resultados
             {
-                string nombreCompleto = row["nombre_alumno"].ToString() + " " + row["ap_pat_alumno"].ToString() + " " + row["ap_mat_alumno"].ToString();
-                row["NombreCompleto"] = nombreCompleto;
+                lblMensaje.Text = "No existen coincidencias con tu búsqueda";
+                gvalumnos.DataSource = null; // Limpiar los datos en caso de haber algún resultado previo
+            }
+            else
+            {
+                lblMensaje.Text = ""; // Limpiar el mensaje en caso de haber resultados anteriores
+                gvalumnos.DataSource = dt;
             }
 
-            dt.Columns.Remove("nombre_alumno");
-            dt.Columns.Remove("ap_pat_alumno");
-            dt.Columns.Remove("ap_mat_alumno");
-
-            dt.Columns["cve_alumno"].ColumnName = "Clave UASLP";
-            dt.Columns["NombreCompleto"].ColumnName = "Nombre";
-            dt.Columns["licenciatura"].ColumnName = "Licenciatura";
-
-            dt.Columns["Clave UASLP"].SetOrdinal(0);
-            dt.Columns["Nombre"].SetOrdinal(1);
-
-            gvalumnos.DataSource = dt;
             gvalumnos.DataBind();
-            con.Close();
         }
 
         protected void BtnCreate_Click(object sender, EventArgs e)
@@ -133,7 +119,21 @@ namespace SGIPv2.Pages
             Button BtnConsultar = (Button)sender;
             GridViewRow selectedrow = (GridViewRow)BtnConsultar.NamingContainer;
             id = selectedrow.Cells[1].Text;
-            Response.Redirect("~/Alumnos/CRUD.aspx?id=" + id + "&op=D");
+
+            // Actualizar el campo "activo" a 0 en lugar de eliminar físicamente el registro
+            using (con)
+            {
+                string query = "UPDATE Alumno SET activo = 0 WHERE cve_alumno = @id";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                // Redirigir a la página principal u otra página después de "eliminar" el registro
+                Response.Redirect("~/Alumnos/Index.aspx");
+            }
         }
 
         protected void btnGenerarPDF_Click(object sender, EventArgs e)

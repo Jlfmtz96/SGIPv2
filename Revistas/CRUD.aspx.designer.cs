@@ -78,6 +78,24 @@ namespace SGIPv2.Revistas
         protected global::System.Web.UI.WebControls.TextBox tbpais;
 
         /// <summary>
+        /// tbdoi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tbdoi;
+
+        /// <summary>
+        /// lblDatos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDatos;
+
+        /// <summary>
         /// BtnCreate control.
         /// </summary>
         /// <remarks>
