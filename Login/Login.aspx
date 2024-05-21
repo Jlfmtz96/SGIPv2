@@ -9,7 +9,7 @@
       <div class="bg-gray-100 flex justify-center items-center h-3/4"> <!-- Adjust the height as needed -->
         <!-- Left: Image -->
          <div class="w-1/2  h-3/4 lg:h-full hidden lg:block">
-            <img src="https://wp.uaslp.mx/noticias/wp-content/uploads/sites/5/2023/03/281805687_417506837045017_2663146561332425394_n-1320x879.jpg" alt="Placeholder Image" class="object-cover w-full h-full">
+            <img src="../imagenes/fac.jpg" alt="Placeholder Image" class="object-cover w-full h-full">
         </div>
         <!-- Right: Login Form -->
         <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">

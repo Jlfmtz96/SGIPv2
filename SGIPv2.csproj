@@ -78,6 +78,9 @@
   <ItemGroup>
     <Content Include="Alumnos\CRUD.aspx" />
     <Content Include="Alumnos\Index.aspx" />
+    <Content Include="Imagenes\fac.jpg" />
+    <Content Include="Imagenes\fen.png" />
+    <Content Include="Imagenes\uaslp.png" />
     <Content Include="Investigadores\CRUD.aspx" />
     <Content Include="Investigadores\Index.aspx" />
     <Content Include="Login\Login.aspx" />

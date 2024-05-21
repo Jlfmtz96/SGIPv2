@@ -30,11 +30,14 @@ namespace SGIPv2
                     // If logged in, set the text of the label to the username
                     lblUsername.Text = Session["usuariologueado"].ToString();
                     navbarsesion.Visible = true; // Show the logout button
+                    usermenubutton.Visible = true;
+
                 }
                 else
                 {
                     // If not logged in, set the text of the label to "Iniciar Sesión"
-                    lblUsername.Text = "Iniciar Sesión";
+                    lblUsername.Visible = false;
+                    usermenubutton.Visible = false;
                     navbarsesion.Visible = false; // Hide the logout button
                 }
             }
@@ -134,10 +137,8 @@ namespace SGIPv2
             {
                 // If not logged in, hide the div
                 navbarsesion.Style["display"] = "none";
-
+                mobilemenu.Style["display"] = "none";
             }
-
-
         }
     }
 }
